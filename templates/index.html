@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网络小说阅读网站</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css">
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <strong>网络小说阅读网站</strong>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero section with search bar -->
+    <!-- <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input class="input" type="text" placeholder="搜索小说...">
+                        </div>
+                        <div class="control">
+                            <button class="button is-primary">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section> -->
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <!-- Genre filter -->
+                <div class="column is-one-quarter">
+                    <aside class="menu">
+                        <p class="menu-label">
+                            分类
+                        </p>
+                        <ul class="menu-list">
+                            <li><a class="is-active">全部</a></li>
+                        </ul>
+                    </aside>
+                </div>
+
+                <!-- Webnovel list -->
+                <div class="column">
+
+                    {% for novel in novels %}
+
+                    <div class="box novel-item" data-id="{{ novel.id }}">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <strong>{{ novel.title }}</strong>
+                                        <br>
+                                        <small>作者: {{ novel.author_name }} | 类型: {{ novel.genre }}</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    {% endfor %}
+
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include "footer.html" %}
+
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>
