@@ -7,6 +7,8 @@ from webnovel_backend import database
 from webnovel_backend.model.author import Author, AuthorCreate
 from webnovel_backend.model.novel import Novel, NovelCreate
 
+from webnovel_backend.utils import convert_db_novel_to_model_novel
+
 router = APIRouter()
 
 
@@ -16,7 +18,7 @@ async def create_author(author: AuthorCreate, db: DBDependency):
 
 
 @router.post('/novel', response_model=Novel)
-async def create_novel(novel: NovelCreate, db: DBDependency):
-    tmp = database.create_novel(db=db, title=novel.title, author_name=novel.author_name,
-                                genre=novel.genre, description=novel.description)
-    return Novel(title=tmp.title, id=tmp.id, author_name=novel.author_name, author_id=tmp.author_id, genre=tmp.genre, description=tmp.description)
+async def create_novel(novelCreate: NovelCreate, db: DBDependency):
+    novel = database.create_novel(db=db, title=novelCreate.title, author_name=novelCreate.author_name,
+                                  genre=novelCreate.genre, description=novelCreate.description)
+    return convert_db_novel_to_model_novel(db, novel)

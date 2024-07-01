@@ -42,17 +42,21 @@ def get_novel(db: Session, novel_id: int):
     return db.query(Novel).filter(Novel.id == novel_id).first()
 
 
-def update_novel(db: Session, novel_id: int, title: str = None, author: str = None, genre: Genre = None, description: str = None):
+def update_novel(db: Session, novel_id: int, title: str = None, author_name: str = None, genre: Genre = None, description: str = None):
     db_novel = db.query(Novel).filter(Novel.id == novel_id).first()
     if not db_novel:
         return None
 
     if title:
         db_novel.title = title
-    if author:
-        db_novel.author = author
+
+    if author_name:
+        author_id = find_or_create_author_id(db, author_name)
+        db_novel.author_id = author_id
+
     if genre:
         db_novel.genre = genre
+
     if description:
         db_novel.description = description
 
