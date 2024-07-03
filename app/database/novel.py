@@ -34,6 +34,10 @@ def create_novel(db: Session, title: str, author_name: str, genre: Genre, descri
     return db_novel
 
 
+def get_total_novels_count(db: Session):
+    return db.query(Novel).count()
+
+
 def get_novels(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Novel).offset(skip).limit(limit).all()
 

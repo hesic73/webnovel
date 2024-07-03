@@ -33,7 +33,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section> -->
 
@@ -62,6 +61,19 @@
                         </li>
                         {% endfor %}
                     </ul>
+
+                    <!-- Pagination controls -->
+                    <nav class="pagination" role="navigation" aria-label="pagination">
+                        <a class="pagination-previous" {% if page <= 1 %}disabled{% else %}href="/?page={{ page - 1 }}&page_size={{ page_size }}"{% endif %}>Previous</a>
+                        <a class="pagination-next" {% if page >= total_pages %}disabled{% else %}href="/?page={{ page + 1 }}&page_size={{ page_size }}"{% endif %}>Next</a>
+                        <ul class="pagination-list">
+                            {% for p in range(1, total_pages + 1) %}
+                            <li>
+                                <a class="pagination-link {% if p == page %}is-current{% endif %}" href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
