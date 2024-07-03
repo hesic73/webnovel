@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from webnovel_backend.enums import Genre
+from app.enums import Genre
 
 
 class NovelCreate(BaseModel):

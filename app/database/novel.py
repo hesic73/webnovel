@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from .base import Base
 from .author import find_or_create_author_id
 
-from webnovel_backend.enums import Genre
+from app.enums import Genre
 
 
 class Novel(Base):

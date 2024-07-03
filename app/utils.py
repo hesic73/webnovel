@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from webnovel_backend import database
+from app import database
 
-from webnovel_backend.model.novel import Novel
+from app.model.novel import Novel
 
 
 def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> Novel:

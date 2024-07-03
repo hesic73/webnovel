@@ -2,10 +2,10 @@ from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from webnovel_backend.dependencies import DBDependency
-from webnovel_backend import database
+from app.dependencies import DBDependency
+from app import database
 
-from webnovel_backend.utils import convert_db_novel_to_model_novel
+from app.utils import convert_db_novel_to_model_novel
 
 router = APIRouter()
 

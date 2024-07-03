@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from webnovel_backend.router import pages, common, admin
+from app.router import pages, common, admin
 
 app = FastAPI(title="网络小说阅读网站")
 

@@ -52,29 +52,16 @@
                     </aside>
                 </div>
 
-                <!-- Webnovel list -->
                 <div class="column">
-
-                    {% for novel in novels %}
-
-                    <div class="box novel-item" data-id="{{ novel.id }}">
-                        <article class="media">
-                            <div class="media-content">
-                                <div class="content">
-                                    <p>
-                                        <strong>{{ novel.title }}</strong>
-                                        <br>
-                                        <small>作者: {{ novel.author_name }} | 类型: {{ novel.genre.value }}</small>
-                                    </p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-
-                    {% endfor %}
-
-
-
+                    <ul>
+                        {% for novel in novels %}
+                        <li>
+                            <a href="/novel/{{ novel.id }}">
+                                <strong>{{ novel.title }}</strong> - 作者: {{ novel.author_name }} | 类型: {{ novel.genre.value }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
@@ -82,7 +69,6 @@
 
     {% include "footer.html" %}
 
-    <script src="/static/js/index.js"></script>
 </body>
 
 </html>

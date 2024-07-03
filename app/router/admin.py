@@ -1,13 +1,13 @@
 from fastapi import APIRouter
 
-from webnovel_backend.dependencies import DBDependency
+from app.dependencies import DBDependency
 
-from webnovel_backend import database
+from app import database
 
-from webnovel_backend.model.author import Author, AuthorCreate
-from webnovel_backend.model.novel import Novel, NovelCreate
+from app.model.author import Author, AuthorCreate
+from app.model.novel import Novel, NovelCreate
 
-from webnovel_backend.utils import convert_db_novel_to_model_novel
+from app.utils import convert_db_novel_to_model_novel
 
 router = APIRouter()
 
