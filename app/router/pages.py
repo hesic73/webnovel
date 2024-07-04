@@ -52,9 +52,15 @@ async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
 async def novel(request: Request, id: int, db: DBDependency):
     novel = database.get_novel(db, novel_id=id)
     novel = convert_db_novel_to_model_novel(db, novel)
+
+    first_chapter = database.get_first_chapter(db, novel_id=id)
+    first_chapter = ChapterModel(
+        **first_chapter.__dict__) if first_chapter else None
+
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
         'novel': novel,
         'title': f'{novel.title} - {novel.author_name}',
+        'first_chapter': first_chapter,
     })
 
 

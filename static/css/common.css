@@ -1,0 +1,13 @@
+body {
+    color: #555;
+    font-family: "宋体", "Microsoft YaHei", "微软雅黑";
+}
+
+.custom-link{
+    color: #444;
+    text-decoration: none;
+}
+
+.custom-link:hover{
+    text-decoration: underline;
+}

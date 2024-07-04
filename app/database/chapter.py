@@ -79,3 +79,7 @@ def get_next_chapter(db: Session, novel_id: int, chapter_number: int):
         Chapter.novel_id == novel_id,
         Chapter.chapter_number > chapter_number
     ).order_by(Chapter.chapter_number.asc()).first()
+
+
+def get_first_chapter(db: Session, novel_id: int):
+    return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number.asc()).first()
