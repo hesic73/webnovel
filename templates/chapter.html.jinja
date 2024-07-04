@@ -1,0 +1,29 @@
+{% extends "base.html.jinja" %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="buttons">
+            <a class="button is-primary" href="/novel/{{ novel.id }}/">返回书页</a>
+        </div>
+        <h1 class="title">{{ chapter.title }}</h1>
+        <div class="content">
+            <p>{{ chapter.content | nl2br | safe }}</p>
+        </div>
+        <div class="buttons is-centered">
+            {% if previous_chapter %}
+            <a id="previous-chapter" class="button is-link" href="/chapter/{{ previous_chapter.id }}/">上一章</a>
+            {% else %}
+            <a class="button is-link" disabled>上一章</a>
+            {% endif %}
+            <a class="button is-link" href="/chapters_{{ novel.id }}/">章节目录</a>
+            {% if next_chapter %}
+            <a id="next-chapter" class="button is-link" href="/chapter/{{ next_chapter.id }}/">下一章</a>
+            {% else %}
+            <a class="button is-link" disabled>下一章</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<script src="/static/js/chapter.js"></script>
+{% endblock %}

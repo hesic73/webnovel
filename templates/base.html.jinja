@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title|default("网络小说阅读网站")}}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css">
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <strong>网络小说阅读网站</strong>
+            </a>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>网络小说阅读网站</strong>由<a href="https://github.com/hesic73" target="_blank">Sicheng He</a>构建，源代码遵循<a
+                    href="http://opensource.org/licenses/mit-license.php">MIT协议</a>。
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

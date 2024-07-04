@@ -22,4 +22,13 @@ async def get_db():
     finally:
         db.close()
 
+
+def get_db_sync():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 Base.metadata.create_all(bind=engine)
