@@ -8,7 +8,7 @@
                 <p><span class="is-size-3 has-text-weight-bold">{{ novel.title }}</span>&nbsp;&nbsp;<span>{{
                         novel.author_name }}</span></p>
                 <p class="tag">{{ novel.genre.value }}</p>
-                <p>{{ novel.description | nl2br | safe }}</p>
+                <p>{{ novel.description | safe }}</p>
                 <!-- Buttons section -->
                 <div class="buttons">
                     <a href="/chapters_{{novel.id}}/" class="button is-primary is-large">章节目录</a>
