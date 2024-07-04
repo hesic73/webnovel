@@ -1,3 +1,5 @@
+from fastapi import FastAPI
+
 from sqlalchemy.orm import Session
 
 from sqladmin import Admin, ModelView
@@ -43,7 +45,7 @@ class ChapterView(ModelView, model=database.Chapter):
                    database.Chapter.chapter_number, database.Chapter.novel_id]
 
 
-def initialize_admin(app):
+def initialize_admin(app: FastAPI):
     admin = Admin(app=app, engine=database.engine, title="Admin Panel")
     admin.add_view(AuthorView)
     admin.add_view(NovelView)

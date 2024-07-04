@@ -1,22 +1,19 @@
-#!/usr/bin/env python3
+"""
+https://www.xbiqugew.com  
+"""
 
-import time
-import hashlib
 import logging
 import requests
 from urllib.parse import urljoin, urlencode
 
-from bs4 import BeautifulSoup, NavigableString
-
-
-BIQUGE_URL = 'https://www.xbiqugew.com'
+from bs4 import BeautifulSoup
 
 
 logger = logging.getLogger(__name__)
 
 
-def search_book(book_name: str) -> str:
-    search_url_base = urljoin(BIQUGE_URL, "/modules/article/search.php")
+def search_book(book_name: str, biquge_url: str) -> str:
+    search_url_base = urljoin(biquge_url, "/modules/article/search.php")
     query_params = {'searchkey': book_name.encode('GBK')}
     query_string = urlencode(query_params, encoding='GBK')
     search_url = f"{search_url_base}?{query_string}"

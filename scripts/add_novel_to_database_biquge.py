@@ -3,7 +3,7 @@
 from app.enums import Genre
 from app.database.chapter import create_chapter
 from app.database.novel import create_novel
-from app.spider import get_novel_data, get_chapter_content
+from app.spiders.biquge2 import get_novel_data, get_chapter_content
 from app.database import get_db_sync
 import sys
 from typing import Callable
@@ -29,6 +29,7 @@ def add_novel_to_database_biquge(db: Session, novel_url: str, genre: Genre, on_c
 
     # Add chapters
     for i, chapter in enumerate(novel_data['chapters']):
+        print(chapter)
         chapter_content = get_chapter_content(chapter[1])
         create_chapter(
             db=db,
