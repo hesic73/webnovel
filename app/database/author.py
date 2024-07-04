@@ -12,6 +12,9 @@ class Author(Base):
     novels = relationship('Novel', back_populates='author',
                           cascade='all, delete-orphan')
 
+    def __repr__(self):
+        return f"{self.name}"
+
 
 def create_author(db: Session, name: str):
     db_author = Author(name=name)

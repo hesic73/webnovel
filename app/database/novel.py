@@ -18,6 +18,9 @@ class Novel(Base):
     author = relationship('Author', back_populates='novels')
     chapters = relationship(
         'Chapter', back_populates='novel', cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        return f"{self.title}"
 
 
 def create_novel(db: Session, title: str, author_name: str, genre: Genre, description: str = None):

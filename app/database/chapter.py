@@ -20,6 +20,9 @@ class Chapter(Base):
                          name='_novel_chapter_uc'),
     )
 
+    def __repr__(self):
+        return f"{self.chapter_number} {self.title}"
+
 
 def create_chapter(db: Session, novel_id: int, chapter_number: int, title: str, content: str):
     db_chapter = Chapter(
