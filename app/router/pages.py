@@ -9,7 +9,7 @@ from app.utils import convert_db_novel_to_model_novel
 
 from app.model.chapter import Chapter as ChapterModel
 
-router = APIRouter()
+router = APIRouter(tags=["Pages"])
 
 templates = Jinja2Templates(directory="templates")
 
@@ -92,34 +92,36 @@ async def chapters(request: Request, id: int, db: DBDependency, page: int = Quer
     )
 
 
-@router.get("/chapter/{chapter_id}/", response_class=HTMLResponse)
-async def chapter(request: Request, chapter_id: int, db: DBDependency):
-    chapter = database.get_chapter(db, chapter_id=chapter_id)
+@router.get("/novel/{novel_id}/{chapter_id}/", response_class=HTMLResponse)
+async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDependency):
+    novel = database.get_novel_with_chapters(db, novel_id=novel_id)
+    if not novel:
+        return HTMLResponse(status_code=404, content="Novel not found")
+
+    chapter = next((ch for ch in novel.chapters if ch.id == chapter_id), None)
     if not chapter:
         return HTMLResponse(status_code=404, content="Chapter not found")
 
-    chapter = ChapterModel(**chapter.__dict__)
+    chapter_model = ChapterModel(**chapter.__dict__)
+    novel_model = convert_db_novel_to_model_novel(db, novel)
 
-    novel = database.get_novel(db, novel_id=chapter.novel_id)
-    novel = convert_db_novel_to_model_novel(db, novel)
-
-    previous_chapter = database.get_previous_chapter(
-        db, chapter.novel_id, chapter.chapter_number)
-    previous_chapter = ChapterModel(
+    previous_chapter = next(
+        (ch for ch in novel.chapters if ch.chapter_number < chapter.chapter_number), None)
+    previous_chapter_model = ChapterModel(
         **previous_chapter.__dict__) if previous_chapter else None
-    next_chapter = database.get_next_chapter(
-        db, chapter.novel_id, chapter.chapter_number)
-    next_chapter = ChapterModel(
+    next_chapter = next(
+        (ch for ch in novel.chapters if ch.chapter_number > chapter.chapter_number), None)
+    next_chapter_model = ChapterModel(
         **next_chapter.__dict__) if next_chapter else None
 
     return templates.TemplateResponse(
         "chapter.html.jinja",
         {
             'request': request,
-            'chapter': chapter,
-            'novel': novel,
+            'chapter': chapter_model,
+            'novel': novel_model,
             'title': f'{novel.title} - {chapter.title}',
-            'previous_chapter': previous_chapter,
-            'next_chapter': next_chapter,
+            'previous_chapter': previous_chapter_model,
+            'next_chapter': next_chapter_model,
         }
     )

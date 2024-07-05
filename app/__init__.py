@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from app.router import pages, common
+from app.router import pages
 
 from app.utils import initialize_admin
 
@@ -13,4 +13,3 @@ initialize_admin(app)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(pages.router)
-app.include_router(common.router)

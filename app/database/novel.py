@@ -1,6 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Text, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 
 from .base import Base
 from .author import find_or_create_author_id
@@ -47,6 +48,11 @@ def get_novels(db: Session, skip: int = 0, limit: int = 10):
 
 def get_novel(db: Session, novel_id: int):
     return db.query(Novel).filter(Novel.id == novel_id).first()
+
+
+def get_novel_with_chapters(db: Session, novel_id: int):
+    return db.query(Novel).filter(Novel.id == novel_id).options(joinedload(Novel.chapters)).first()
+
 
 
 def update_novel(db: Session, novel_id: int, title: str = None, author_name: str = None, genre: Genre = None, description: str = None):
