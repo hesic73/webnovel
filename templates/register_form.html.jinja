@@ -1,0 +1,38 @@
+{% extends "base.html.jinja" %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">注册</h1>
+        <div id="notification" class="notification is-hidden"></div>
+        <form id="registerForm">
+            <div class="field">
+                <label class="label">用户名</label>
+                <div class="control">
+                    <input class="input" type="text" id="username" placeholder="请输入用户名">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">电子邮箱</label>
+                <div class="control">
+                    <input class="input" type="email" id="email" placeholder="请输入电子邮箱">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">密码</label>
+                <div class="control">
+                    <input class="input" type="password" id="password" placeholder="请输入密码">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="button" onclick="registerUser()">注册</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<script src="/static/js/register_form.js"></script>
+{% endblock %}

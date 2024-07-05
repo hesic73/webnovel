@@ -19,6 +19,7 @@ class Novel(Base):
     author = relationship('Author', back_populates='novels')
     chapters = relationship(
         'Chapter', back_populates='novel', cascade='all, delete-orphan')
+    reading_entries = relationship('ReadingEntry', back_populates='novel')  # One-to-many relationship
     
     def __repr__(self):
         return f"{self.title}"

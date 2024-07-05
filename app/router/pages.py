@@ -125,3 +125,19 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
             'next_chapter': next_chapter_model,
         }
     )
+
+
+@router.get("/register_form/", response_class=HTMLResponse)
+async def register_form(request: Request):
+    return templates.TemplateResponse("register_form.html.jinja", {
+        "request": request,
+        'title': '注册',
+    })
+
+
+@router.get("/login_form/", response_class=HTMLResponse)
+async def login_form(request: Request):
+    return templates.TemplateResponse("login_form.html.jinja", {
+        "request": request,
+        'title': '登录',
+    })

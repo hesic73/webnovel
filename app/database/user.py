@@ -15,6 +15,9 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     user_type = Column(Enum(UserType), nullable=False)
 
+    reading_entries = relationship(
+        'ReadingEntry', back_populates='user', cascade='all, delete-orphan')  # One-to-many relationship
+
     def __repr__(self):
         return f"{self.username}"
 
@@ -34,6 +37,10 @@ def get_users(db: Session, skip: int = 0, limit: int = 10):
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
+
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
 
 
 def get_user_by_id(db: Session, user_id: int):
