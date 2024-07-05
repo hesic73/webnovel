@@ -13,7 +13,7 @@
                 <div class="buttons">
                     <a href="/chapters_{{novel.id}}/" class="button is-primary is-large">章节目录</a>
                     {% if first_chapter %}
-                    <a href="/chapter/{{first_chapter.id}}/" class="button is-link is-large">开始阅读</a>
+                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}/" class="button is-link is-large">开始阅读</a>
                     {% else %}
                     <span class="button is-link is-large" disabled>开始阅读</span>
                     {% endif %}

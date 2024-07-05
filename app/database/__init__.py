@@ -1,3 +1,9 @@
+from typing import Annotated
+
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -5,6 +11,7 @@ from .base import Base
 from .novel import *
 from .chapter import *
 from .author import *
+from .user import *
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./webnovel.db"
 
@@ -32,3 +39,6 @@ def get_db_sync():
 
 
 Base.metadata.create_all(bind=engine)
+
+
+DBDependency = Annotated[Session, Depends(get_db)]

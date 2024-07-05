@@ -3,7 +3,7 @@
 from app.enums import Genre
 from app.database.chapter import create_chapter
 from app.database.novel import create_novel
-from app.spiders.biquge2 import get_novel_data, get_chapter_content
+from app.spiders.biquge1 import get_novel_data, get_chapter_content
 from app.database import get_db_sync
 import sys
 from typing import Callable
@@ -51,6 +51,7 @@ def add_novel_to_database_biquge(db: Session, novel_url: str, genre: Genre, on_c
 class Worker(QThread):
     progress = pyqtSignal(int)
     max_progress = pyqtSignal(int)
+    finished = pyqtSignal()
 
     def __init__(self, url: str, genre: Genre):
         super().__init__()
@@ -71,6 +72,7 @@ class Worker(QThread):
             )
         finally:
             db.close()
+            self.finished.emit()
 
 
 class SimpleGUI(QMainWindow):
@@ -124,10 +126,14 @@ class SimpleGUI(QMainWindow):
 
         QMessageBox.information(self, "Input Information",
                                 f"URL: {url}\nSelected Genre: {genre.value}")
+        
+
+        self.start_button.setDisabled(True)
 
         self.worker = Worker(url, genre)
         self.worker.progress.connect(self.update_progress_bar)
         self.worker.max_progress.connect(self.set_max_progress)
+        self.worker.finished.connect(self.on_worker_finished)
         self.worker.start()
 
     def set_max_progress(self, max_value):
@@ -135,9 +141,11 @@ class SimpleGUI(QMainWindow):
 
     def update_progress_bar(self, value):
         self.progress_bar.setValue(value)
-        if value == self.progress_bar.maximum():
-            QMessageBox.information(
-                self, "Task Completed", "The task has been completed successfully!")
+
+    def on_worker_finished(self):
+        self.start_button.setDisabled(False)  # Re-enable start button
+        QMessageBox.information(
+            self, "Task Completed", "The task has been completed successfully!")
 
 
 if __name__ == "__main__":

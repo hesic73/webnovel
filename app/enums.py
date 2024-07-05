@@ -17,3 +17,9 @@ class Genre(Enum):
     轻小说 = "轻小说"
     短篇 = "短篇"
     诸天无限 = "诸天无限"
+
+
+class UserType(Enum):
+    COMMON = "common"
+    ADMIN = "admin"
+    

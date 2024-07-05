@@ -2,12 +2,12 @@ from fastapi import Request, APIRouter, Query
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from app.dependencies import DBDependency
+from app.database import DBDependency
 from app import database
 
 from app.utils import convert_db_novel_to_model_novel
 
-from app.model.chapter import Chapter as ChapterModel
+from app.schema.chapter import Chapter as ModelChapter
 
 router = APIRouter(tags=["Pages"])
 
@@ -54,7 +54,7 @@ async def novel(request: Request, id: int, db: DBDependency):
     novel = convert_db_novel_to_model_novel(db, novel)
 
     first_chapter = database.get_first_chapter(db, novel_id=id)
-    first_chapter = ChapterModel(
+    first_chapter = ModelChapter(
         **first_chapter.__dict__) if first_chapter else None
 
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
@@ -70,7 +70,7 @@ async def chapters(request: Request, id: int, db: DBDependency, page: int = Quer
 
     chapters = database.get_chapters(
         db, novel_id=id, skip=skip, limit=page_size)
-    chapters = [ChapterModel(**chapter.__dict__) for chapter in chapters]
+    chapters = [ModelChapter(**chapter.__dict__) for chapter in chapters]
     # Add a function to get the total count of chapters for a novel
     total_chapters = database.get_total_chapters_count(db, novel_id=id)
     total_pages = (total_chapters + page_size - 1) // page_size
@@ -102,16 +102,16 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     if not chapter:
         return HTMLResponse(status_code=404, content="Chapter not found")
 
-    chapter_model = ChapterModel(**chapter.__dict__)
+    chapter_model = ModelChapter(**chapter.__dict__)
     novel_model = convert_db_novel_to_model_novel(db, novel)
 
     previous_chapter = next(
         (ch for ch in novel.chapters if ch.chapter_number < chapter.chapter_number), None)
-    previous_chapter_model = ChapterModel(
+    previous_chapter_model = ModelChapter(
         **previous_chapter.__dict__) if previous_chapter else None
     next_chapter = next(
         (ch for ch in novel.chapters if ch.chapter_number > chapter.chapter_number), None)
-    next_chapter_model = ChapterModel(
+    next_chapter_model = ModelChapter(
         **next_chapter.__dict__) if next_chapter else None
 
     return templates.TemplateResponse(
