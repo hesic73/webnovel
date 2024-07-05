@@ -2,8 +2,10 @@ import os
 
 from passlib.context import CryptContext
 
-from fastapi import FastAPI
-from authx import AuthX, AuthXConfig, RequestToken
+from fastapi import FastAPI, Depends
+from authx import AuthX, AuthXConfig, RequestToken, TokenPayload
+
+from typing import Annotated
 
 
 config = AuthXConfig(
@@ -34,3 +36,11 @@ def verify_token(token: str):
         return False
 
     return True
+
+
+RequestTokenDependency = Annotated[RequestToken, Depends(
+    auth.get_access_token_from_request)]
+
+
+TokenPayloadDependency = Annotated[TokenPayload,
+                                   Depends(auth.access_token_required)]

@@ -3,7 +3,6 @@ from fastapi import Depends, HTTPException
 
 from pydantic import BaseModel, EmailStr
 
-from sqlalchemy.exc import IntegrityError
 
 from app.database import DBDependency
 from app import database
@@ -69,19 +68,13 @@ async def register_user(form_data: RegisterRequest, db: DBDependency):
         )
     hashed_password = pwd_context.hash(form_data.password)
 
-    try:
-        user = database.create_user(db=db, username=form_data.username, email=form_data.email,
-                                    hashed_password=hashed_password)
+    user = database.create_user(db=db, username=form_data.username, email=form_data.email,
+                                hashed_password=hashed_password)
 
-    except IntegrityError as e:
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username or email already registered"
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
         )
 
     if user is None:

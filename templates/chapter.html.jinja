@@ -5,6 +5,7 @@
     <div class="container">
         <div class="buttons">
             <a class="button is-primary" href="/novel/{{ novel.id }}/">返回书页</a>
+            <button class="button is-link" onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">加入书签</button>
         </div>
         <h1 class="title">{{ chapter.title }}</h1>
         <div class="content is-size-4">

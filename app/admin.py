@@ -33,6 +33,11 @@ class UserView(ModelView, model=database.User):
                    database.User.email, database.User.user_type]
 
 
+class ReadingEntryView(ModelView, model=database.ReadingEntry):
+    column_list = [database.ReadingEntry.id, database.ReadingEntry.user_id,
+                   database.ReadingEntry.novel_id, database.ReadingEntry.current_chapter_id]
+
+
 class AdminAuth(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
         form = await request.form()
@@ -83,4 +88,5 @@ def initialize_admin(app: FastAPI):
     admin.add_view(NovelView)
     admin.add_view(ChapterView)
     admin.add_view(UserView)
+    admin.add_view(ReadingEntryView)
     return admin

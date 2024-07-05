@@ -16,6 +16,8 @@ async function loginUser() {
     const notification = document.getElementById('notification');
 
     if (response.ok) {
+        const result = await response.json();
+        localStorage.setItem('access_token', result.access_token); // Save token locally
         window.location.href = '/';
     } else {
         const result = await response.json();

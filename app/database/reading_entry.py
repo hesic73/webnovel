@@ -37,16 +37,6 @@ def create_reading_entry(db: Session, user_id: int, novel_id: int, current_chapt
     return reading_entry
 
 
-def update_reading_progress(db: Session, user_id: int, novel_id: int, chapter_id: int):
-    reading_entry = db.query(ReadingEntry).filter_by(
-        user_id=user_id, novel_id=novel_id).first()
-    if reading_entry:
-        reading_entry.current_chapter_id = chapter_id
-        db.commit()
-        db.refresh(reading_entry)
-    return reading_entry
-
-
 def get_user_reading_entries(db: Session, user_id: int):
     return db.query(ReadingEntry).filter_by(user_id=user_id).all()
 

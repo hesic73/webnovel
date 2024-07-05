@@ -1,0 +1,26 @@
+{% extends "base.html.jinja" %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title" id="bookshelf-title">书架</h1>
+        <table class="table is-fullwidth is-striped">
+            <thead>
+                <tr>
+                    <th>小说</th>
+                    <th>作者</th>
+                    <th>书签</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="bookshelf-table">
+                <tr>
+                    <td colspan="5">加载中...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script src="/static/js/bookshelf.js"></script>
+{% endblock %}

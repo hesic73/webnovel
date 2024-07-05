@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from .base import Base
 
@@ -23,12 +24,16 @@ class User(Base):
 
 
 def create_user(db: Session, username: str, hashed_password: str, email: str, user_type: UserType = UserType.COMMON):
-    db_user = User(username=username, hashed_password=hashed_password,
-                   email=email, user_type=user_type)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    try:
+        db_user = User(username=username, hashed_password=hashed_password,
+                    email=email, user_type=user_type)
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except IntegrityError:
+        db.rollback()
+        return None
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 10):

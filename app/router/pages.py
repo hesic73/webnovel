@@ -105,12 +105,11 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     chapter_model = ModelChapter(**chapter.__dict__)
     novel_model = convert_db_novel_to_model_novel(db, novel)
 
-    previous_chapter = next(
-        (ch for ch in novel.chapters if ch.chapter_number < chapter.chapter_number), None)
+    previous_chapter = database.get_previous_chapter(
+        db, novel_id, chapter.chapter_number)
     previous_chapter_model = ModelChapter(
         **previous_chapter.__dict__) if previous_chapter else None
-    next_chapter = next(
-        (ch for ch in novel.chapters if ch.chapter_number > chapter.chapter_number), None)
+    next_chapter = database.get_next_chapter(db, novel_id, chapter.chapter_number)
     next_chapter_model = ModelChapter(
         **next_chapter.__dict__) if next_chapter else None
 
@@ -140,4 +139,12 @@ async def login_form(request: Request):
     return templates.TemplateResponse("login_form.html.jinja", {
         "request": request,
         'title': '登录',
+    })
+
+
+@router.get("/bookshelf/", response_class=HTMLResponse)
+async def bookshelf(request: Request):
+    return templates.TemplateResponse("bookshelf.html.jinja", {
+        "request": request,
+        'title': '书架',
     })
