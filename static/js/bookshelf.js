@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     : '';
 
                 row.innerHTML = `
-                <td>${entry.title}</td>
+                <td><a href="/novel/${entry.novel_id}/">${entry.title}</a></td>
                 <td>${entry.author}</td>
                 <td>${chapterLink}</td>
                 <td><button class="button is-small is-danger" onclick="removeFromBookshelf(${entry.novel_id})">移除书架</button></td>

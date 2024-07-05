@@ -66,7 +66,7 @@ async def remove_novel_from_bookshelf(db: DBDependency, payload: TokenPayloadDep
 
 class BookmarkRequest(BaseModel):
     novel_id: int
-    chapter_id: int
+    chapter_id: int | None = None
 
 
 @router.post("/bookmark/", response_model=ReadingEntryUpdate)
@@ -85,10 +85,11 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, payload: Tok
         db, user_id=user_id, novel_id=bookmark.novel_id)
 
     if reading_entry:
-        # Update existing reading entry
-        reading_entry.current_chapter_id = bookmark.chapter_id
-        db.commit()
-        db.refresh(reading_entry)
+        if bookmark.chapter_id:
+            # Update existing reading entry
+            reading_entry.current_chapter_id = bookmark.chapter_id
+            db.commit()
+            db.refresh(reading_entry)
     else:
         # Create a new reading entry
         reading_entry = database.create_reading_entry(

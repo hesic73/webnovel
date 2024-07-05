@@ -17,9 +17,12 @@
                     {% else %}
                     <span class="button is-link is-large" disabled>开始阅读</span>
                     {% endif %}
+                    <button href="/bookmark" class="button is-danger is-large"
+                        onclick="addBookmark({{ novel.id }})">加入书架</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script src="/static/js/common.js"></script>
 {% endblock %}
