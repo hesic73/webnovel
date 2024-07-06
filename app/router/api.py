@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app.schema.reading_entry import ReadingEntryDisplay, ReadingEntryDelete, ReadingEntryUpdate
+from app.schema.novel import Novel, NovelUpdate
 from app.database import DBDependency
 from app import database
 
@@ -100,3 +101,14 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, payload: Tok
         )
 
     return reading_entry
+
+
+# update the novel
+
+@router.put("/novel/{novel_id}/", response_model=Novel)
+async def update_novel(novel: NovelUpdate, db: DBDependency):
+    db_novel = database.update_novel(db=db, novel_id=novel.id, title=novel.title,
+                                     author_name=novel.author_name, genre=novel.genre, description=novel.description)
+    if not db_novel:
+        raise HTTPException(status_code=404, detail="Novel not found")
+    return db_novel

@@ -20,7 +20,7 @@ def nl2br(value: str) -> str:
 
 templates.env.filters['nl2br'] = nl2br
 
-_DEFAULT_NOVEL_PAGE_SIZE = 10
+_DEFAULT_NOVEL_PAGE_SIZE = 20
 _DEFAULT_CHAPTER_PAGE_SIZE = 100
 
 
