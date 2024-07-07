@@ -3,17 +3,19 @@
 {% block content %}
 <section class="section">
     <div class="container">
+        <h1 class="title has-text-centered">{{ chapter.title }}</h1>
         <div class="buttons">
-            <a class="button is-primary" href="/novel/{{ novel.id }}/">返回书页</a>
+            <a class="button is-primary" href="/chapters_{{ novel.id }}/">返回目录</a>
             <button class="button is-link" onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">加入书签</button>
         </div>
-        <h1 class="title">{{ chapter.title }}</h1>
+
         <div class="content is-size-4">
             <p>{{ chapter.content | safe }}</p>
         </div>
         <div class="buttons is-centered">
             {% if previous_chapter %}
-            <a id="previous-chapter" class="button is-link" href="/novel/{{ novel.id }}/{{ previous_chapter.id }}/">上一章</a>
+            <a id="previous-chapter" class="button is-link"
+                href="/novel/{{ novel.id }}/{{ previous_chapter.id }}/">上一章</a>
             {% else %}
             <a class="button is-link" disabled>上一章</a>
             {% endif %}
