@@ -7,11 +7,13 @@ from authx import AuthX, AuthXConfig, RequestToken, TokenPayload
 
 from typing import Annotated
 
+from datetime import timedelta
 
 config = AuthXConfig(
     JWT_ALGORITHM="HS256",
     JWT_SECRET_KEY=os.environ.get('SECRET_KEY', 'secret'),
     JWT_TOKEN_LOCATION=["headers"],
+    JWT_ACCESS_TOKEN_EXPIRES=None,
 )
 
 auth = AuthX(config=config)

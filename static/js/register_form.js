@@ -22,6 +22,7 @@ async function registerUser() {
         notification.classList.remove('is-hidden', 'is-danger');
         notification.classList.add('is-success');
         notification.textContent = '注册成功!';
+        window.location.href = '/login_form/';
     } else {
         const result = await response.json();
         notification.classList.remove('is-hidden', 'is-success');
