@@ -19,24 +19,30 @@ class Novel(Base):
     author = relationship('Author', back_populates='novels')
     chapters = relationship(
         'Chapter', back_populates='novel', cascade='all, delete-orphan')
-    reading_entries = relationship('ReadingEntry', back_populates='novel')  # One-to-many relationship
-    
+    reading_entries = relationship(
+        'ReadingEntry', back_populates='novel')  # One-to-many relationship
+
     def __repr__(self):
         return f"{self.title}"
 
 
 def create_novel(db: Session, title: str, author_name: str, genre: Genre, description: str = None):
     author_id = find_or_create_author_id(db, author_name)
-    db_novel = Novel(
-        title=title,
-        author_id=author_id,
-        genre=genre,
-        description=description
-    )
-    db.add(db_novel)
-    db.commit()
-    db.refresh(db_novel)
-    return db_novel
+    try:
+        db_novel = Novel(
+            title=title,
+            author_id=author_id,
+            genre=genre,
+            description=description
+        )
+        db.add(db_novel)
+        db.commit()
+        db.refresh(db_novel)
+        return db_novel
+    except Exception as e:
+        db.rollback()
+        print(f"Error creating novel: {e}")
+        return None
 
 
 def get_total_novels_count(db: Session):
@@ -53,7 +59,6 @@ def get_novel(db: Session, novel_id: int):
 
 def get_novel_with_chapters(db: Session, novel_id: int):
     return db.query(Novel).filter(Novel.id == novel_id).options(joinedload(Novel.chapters)).first()
-
 
 
 def update_novel(db: Session, novel_id: int, title: str = None, author_name: str = None, genre: Genre = None, description: str = None):

@@ -22,6 +22,11 @@ class NovelView(ModelView, model=database.Novel):
     column_list = [database.Novel.id, database.Novel.title,
                    database.Novel.genre]
 
+    form_excluded_columns = [database.Novel.chapters,
+                             database.Novel.reading_entries]
+
+    column_details_exclude_list = [database.Novel.author_id,]
+
 
 class ChapterView(ModelView, model=database.Chapter):
     column_list = [database.Chapter.id, database.Chapter.title,

@@ -3,7 +3,7 @@
 from app.enums import Genre
 from app.database.chapter import create_chapter
 from app.database.novel import create_novel
-from app.spiders.biquge1 import get_novel_data, get_chapter_content
+from app.spiders.piaotian import get_novel_data, get_chapter_content
 from app.database import get_db_sync
 import sys
 from typing import Callable
