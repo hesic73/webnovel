@@ -15,7 +15,6 @@ document.addEventListener('keydown', function (event) {
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '/login_form/';
         return;
     }
 });
