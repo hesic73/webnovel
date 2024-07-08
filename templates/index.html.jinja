@@ -21,7 +21,9 @@
                     {% for novel in novels %}
                     <li>
                         <a href="/novel/{{ novel.id }}/" style="color: inherit; text-decoration: none;">
-                            <strong>{{ novel.title }}</strong> </a> - {{ novel.author_name }} | {{ novel.genre.value
+                            <strong>{{ novel.title }}</strong> </a> - <a href="/author/{{novel.author.id}}/"
+                            style="color: inherit; text-decoration: none;">{{
+                            novel.author.name }}</a> | {{ novel.genre.value
                         }}
 
                     </li>

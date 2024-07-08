@@ -3,11 +3,13 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app.schema.reading_entry import ReadingEntryDisplay, ReadingEntryDelete, ReadingEntryUpdate
-from app.schema.novel import Novel, NovelUpdate
+from app.schema.novel import Novel
 from app.database import DBDependency
 from app import database
 
 from app.securities import TokenPayloadDependency
+
+from app.enums import Genre
 
 
 router = APIRouter()
@@ -104,6 +106,15 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, payload: Tok
 
 
 # update the novel
+
+
+class NovelUpdate(BaseModel):
+    id: int
+    title: str | None = None
+    author_name: str | None = None
+    genre: Genre | None = None
+    description: str | None = None
+
 
 @router.put("/novel/{novel_id}/", response_model=Novel)
 async def update_novel(novel: NovelUpdate, db: DBDependency):

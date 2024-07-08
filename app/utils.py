@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app import database
 
 from app.schema.novel import Novel as ModelNovel
+from app.schema.author import Author as ModelAuthor
 
 
 def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> ModelNovel:
@@ -19,7 +20,10 @@ def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> Mo
         title=db_novel.title,
         id=db_novel.id,
         author_name=db_author.name,
-        author_id=db_novel.author_id,
+        author=ModelAuthor(
+            id=db_author.id,
+            name=db_author.name
+        ),
         genre=db_novel.genre,
         description=db_novel.description
     )

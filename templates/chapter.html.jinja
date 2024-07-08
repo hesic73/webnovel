@@ -4,9 +4,12 @@
 <section class="section">
     <div class="container">
         <h1 class="title has-text-centered">{{ chapter.title }}</h1>
-        <div class="buttons">
-            <a class="button is-primary" href="/chapters_{{ novel.id }}/">返回目录</a>
-            <button class="button is-link" onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">加入书签</button>
+
+        <div class="columns is-centered">
+            <div class="column is-narrow">
+                <a class="custom-link" href="/chapters_{{ novel.id }}/">返回目录</a>
+                <a class="custom-link" onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">加入书签</a>
+            </div>
         </div>
 
         <div class="content is-size-4">

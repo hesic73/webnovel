@@ -1,0 +1,28 @@
+{% extends "base.html.jinja" %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+
+        <h1 class="title has-text-centered">{{ author.name }}的文章列表</h1>
+
+        <table class="table is-fullwidth is-striped">
+            <thead>
+                <tr>
+                    <th>文章名称</th>
+                    <th>作者</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for novel in novels %}
+                <tr>
+                    <td><a href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
+                    <td>{{ author.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</section>
+{% endblock %}

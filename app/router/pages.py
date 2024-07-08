@@ -59,7 +59,7 @@ async def novel(request: Request, id: int, db: DBDependency):
 
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
         'novel': novel,
-        'title': f'{novel.title} - {novel.author_name}',
+        'title': f'{novel.title} - {novel.author.name}',
         'first_chapter': first_chapter,
     })
 
@@ -109,7 +109,8 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
         db, novel_id, chapter.chapter_number)
     previous_chapter_model = ModelChapter(
         **previous_chapter.__dict__) if previous_chapter else None
-    next_chapter = database.get_next_chapter(db, novel_id, chapter.chapter_number)
+    next_chapter = database.get_next_chapter(
+        db, novel_id, chapter.chapter_number)
     next_chapter_model = ModelChapter(
         **next_chapter.__dict__) if next_chapter else None
 
@@ -147,4 +148,21 @@ async def bookshelf(request: Request):
     return templates.TemplateResponse("bookshelf.html.jinja", {
         "request": request,
         'title': '书架',
+    })
+
+
+@router.get("/author/{author_id}/", response_class=HTMLResponse)
+async def author(request: Request, author_id: int, db: DBDependency):
+    author = database.get_author_with_novels(db, author_id)
+    if not author:
+        return HTMLResponse(status_code=404, content="Author not found")
+
+    novels = author.novels
+    novels = [convert_db_novel_to_model_novel(db, novel) for novel in novels]
+
+    return templates.TemplateResponse("author.html.jinja", {
+        'request': request,
+        'author': author,
+        'novels': novels,
+        'title': f"{author.name} - 作品列表",
     })

@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 
 from .base import Base
 
@@ -34,6 +35,10 @@ def get_author_by_name(db: Session, name: str):
 
 def get_author_by_id(db: Session, author_id: int):
     return db.query(Author).filter(Author.id == author_id).first()
+
+
+def get_author_with_novels(db: Session, author_id: int):
+    return db.query(Author).filter(Author.id == author_id).options(joinedload(Author.novels)).first()
 
 
 def find_or_create_author_id(db: Session, name: str) -> int:
