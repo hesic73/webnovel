@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '/login_form/';
+        window.location.href = '/login_form.html';
         return;
     }
 
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data.entries.forEach(entry => {
                 const row = document.createElement('tr');
                 const chapterLink = entry.chapter_id && entry.chapter_name
-                    ? `<a href="/novel/${entry.novel_id}/${entry.chapter_id}/">${entry.chapter_name}</a>`
+                    ? `<a href="/novel/${entry.novel_id}/${entry.chapter_id}.html">${entry.chapter_name}</a>`
                     : '';
 
                 row.innerHTML = `

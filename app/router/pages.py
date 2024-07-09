@@ -64,7 +64,7 @@ async def novel(request: Request, id: int, db: DBDependency):
     })
 
 
-@router.get("/chapters_{id}/", response_class=HTMLResponse)
+@router.get("/novel/{id}/chapters/", response_class=HTMLResponse)
 async def chapters(request: Request, id: int, db: DBDependency, page: int = Query(1, ge=1), page_size: int = Query(_DEFAULT_CHAPTER_PAGE_SIZE, ge=1, le=100)):
     skip = (page - 1) * page_size
 
@@ -92,7 +92,7 @@ async def chapters(request: Request, id: int, db: DBDependency, page: int = Quer
     )
 
 
-@router.get("/novel/{novel_id}/{chapter_id}/", response_class=HTMLResponse)
+@router.get("/novel/{novel_id}/{chapter_id}.html", response_class=HTMLResponse)
 async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDependency):
     novel = database.get_novel_with_chapters(db, novel_id=novel_id)
     if not novel:
@@ -127,7 +127,7 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     )
 
 
-@router.get("/register_form/", response_class=HTMLResponse)
+@router.get("/register_form.html", response_class=HTMLResponse)
 async def register_form(request: Request):
     return templates.TemplateResponse("register_form.html.jinja", {
         "request": request,
@@ -135,7 +135,7 @@ async def register_form(request: Request):
     })
 
 
-@router.get("/login_form/", response_class=HTMLResponse)
+@router.get("/login_form.html", response_class=HTMLResponse)
 async def login_form(request: Request):
     return templates.TemplateResponse("login_form.html.jinja", {
         "request": request,

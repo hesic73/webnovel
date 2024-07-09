@@ -2,7 +2,16 @@
 {% block content %}
 <!-- Novel details section -->
 <section class="section">
+
     <div class="container">
+        <div>
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="/">网络小说阅读网站</a></li>
+                    <li class="is-active"><a href="/novel/{{ novel.id }}/" aria-current="page">{{novel.title}}</a></li>
+                </ul>
+            </nav>
+        </div>
         <div class="box">
             <div class="content">
                 <p><span class="is-size-3 has-text-weight-bold">{{ novel.title }}</span>&nbsp;&nbsp;<span><a
@@ -12,9 +21,9 @@
                 <p>{{ novel.description | safe }}</p>
                 <!-- Buttons section -->
                 <div class="buttons">
-                    <a href="/chapters_{{novel.id}}/" class="button is-primary is-large">章节目录</a>
+                    <a href="/novel/{{ novel.id }}/chapters/" class="button is-primary is-large">章节目录</a>
                     {% if first_chapter %}
-                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}/" class="button is-link is-large">开始阅读</a>
+                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="button is-link is-large">开始阅读</a>
                     {% else %}
                     <span class="button is-link is-large" disabled>开始阅读</span>
                     {% endif %}

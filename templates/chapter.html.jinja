@@ -3,20 +3,30 @@
 {% block content %}
 <section class="section">
     <div class="container">
+        <div>
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><a href="/">网络小说阅读网站</a></li>
+                    <li><a href="/novel/{{ novel.id }}/">{{novel.title}}</a></li>
+                    <li class="is-active"><a href="#" aria-current="page">{{chapter.title}}</a></li>
+                </ul>
+            </nav>
+
+        </div>
         <h1 class="title has-text-centered">{{ chapter.title }}</h1>
 
-        <div class="columns is-centered">
-            <div class="column is-narrow">
+        <div class="columns is-mobile is-centered">
+            <div class="column is-narrow is-size-5">
                 {% if previous_chapter %}
                 <a id="previous-chapter" class="custom-link"
-                    href="/novel/{{ novel.id }}/{{ previous_chapter.id }}/">上一章</a>
+                    href="/novel/{{ novel.id }}/{{ previous_chapter.id }}.html">上一章</a>
                 {% else %}
                 <a class="custom-link" disabled>上一章</a>
                 {% endif %}
-                <a class="custom-link" href="/chapters_{{ novel.id }}/">返回目录</a>
+                <a class="custom-link" href="/novel/{{ novel.id }}/chapters/">返回目录</a>
                 <a class="custom-link" onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">加入书签</a>
                 {% if next_chapter %}
-                <a id="next-chapter" class="custom-link" href="/novel/{{ novel.id }}/{{ next_chapter.id }}/">下一章</a>
+                <a id="next-chapter" class="custom-link" href="/novel/{{ novel.id }}/{{ next_chapter.id }}.html">下一章</a>
                 {% else %}
                 <a class="custom-link" disabled>下一章</a>
                 {% endif %}
@@ -29,13 +39,13 @@
         <div class="buttons is-centered">
             {% if previous_chapter %}
             <a id="previous-chapter" class="button is-link"
-                href="/novel/{{ novel.id }}/{{ previous_chapter.id }}/">上一章</a>
+                href="/novel/{{ novel.id }}/{{ previous_chapter.id }}.html">上一章</a>
             {% else %}
             <a class="button is-link" disabled>上一章</a>
             {% endif %}
-            <a class="button is-link" href="/chapters_{{ novel.id }}/">章节目录</a>
+            <a class="button is-link" href="/novel/{{ novel.id }}/chapters/">章节目录</a>
             {% if next_chapter %}
-            <a id="next-chapter" class="button is-link" href="/novel/{{ novel.id }}/{{ next_chapter.id }}/">下一章</a>
+            <a id="next-chapter" class="button is-link" href="/novel/{{ novel.id }}/{{ next_chapter.id }}.html">下一章</a>
             {% else %}
             <a class="button is-link" disabled>下一章</a>
             {% endif %}
