@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from fastapi import FastAPI
 
 from app import database
 
@@ -12,6 +12,10 @@ from typing import Callable
 
 import logging
 import time
+
+from concurrent.futures import ProcessPoolExecutor, Future
+from contextlib import asynccontextmanager
+from typing import Callable
 
 logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO)
@@ -101,3 +105,21 @@ def make_scraper_function(source: ScraperSource):
         return novel
 
     return add_novel_to_database
+
+
+# Singleton executor instance
+executor = ProcessPoolExecutor()
+
+
+def submit_task(fn: Callable, *args, **kwargs) -> Future:
+    """Wrapper around the executor submit method"""
+    return executor.submit(fn, *args, **kwargs)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logging.info("Starting up")
+    yield
+    logging.info("Shutting down executor")
+    executor.shutdown(wait=True)
+    logging.info("Shutdown complete")

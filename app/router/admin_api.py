@@ -1,6 +1,7 @@
-from fastapi import HTTPException, Request, APIRouter, Query, Depends
-from concurrent.futures import ProcessPoolExecutor, Future
+from fastapi import HTTPException, Request, APIRouter, Query
+from concurrent.futures import Future
 import logging
+
 
 from pydantic import BaseModel
 
@@ -10,7 +11,7 @@ from app import database
 
 from app.enums import Genre, ScraperSource, UserType
 
-from app.utils import make_scraper_function
+from app.utils import make_scraper_function, submit_task
 
 
 class ScrapeNovel(BaseModel):
@@ -20,8 +21,6 @@ class ScrapeNovel(BaseModel):
 
 
 router = APIRouter(tags=["Admin API"])
-
-executor = ProcessPoolExecutor()
 
 
 def add_novel_to_database_wrapper(scrape_novel: ScrapeNovel):
@@ -48,7 +47,7 @@ async def scraper(scrape_novel: ScrapeNovel, db: DBDependency, payload: TokenPay
         raise HTTPException(status_code=403, detail="Permission denied")
 
     logging.info(f"Received request to scrape: {scrape_novel.url}")
-    future = executor.submit(add_novel_to_database_wrapper, scrape_novel)
+    future = submit_task(add_novel_to_database_wrapper, scrape_novel)
 
     def log_result(f: Future[None]):
         try:
