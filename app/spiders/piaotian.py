@@ -29,7 +29,7 @@ def get_novel_data(url: str):
     chapters_list = soup.find('div', class_="centent").find_all('li')
 
     chapters = [(a.text, urljoin(url, a['href']))
-                for item in chapters_list if (a := item.find('a'))]
+                for item in chapters_list if (a := item.find('a')) and (a.text.strip() != '') and (a['href'].strip() != '')]
 
     return {
         'title': novel_name,

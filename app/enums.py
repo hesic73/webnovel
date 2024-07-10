@@ -25,6 +25,6 @@ class UserType(Enum):
 
 
 class ScraperSource(Enum):
-    BIQUGE1 = auto()
-    BIQUGE2 = auto()
-    PIAOTIAN = auto()
+    BIQUGE1 = auto()  # https://www.xbiqugew.com
+    BIQUGE2 = auto()  # https://bqghh.cc
+    PIAOTIAN = auto()  # https://www.piaotia.com/

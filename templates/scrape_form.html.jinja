@@ -4,6 +4,7 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Scrape Novel</h1>
+        <div id="message" class="notification is-hidden"></div>
         <form id="scrape-form">
             <div class="field">
                 <label class="label" for="url">Novel URL</label>
@@ -12,33 +13,41 @@
                 </div>
             </div>
 
-            <div class="field">
-                <label class="label" for="source">Source</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="source" name="source" required>
-                            <option value="" disabled selected>Select the source</option>
-                            {% for source in sources %}
-                            <option value="{{ source.value }}">{{ source.name }}</option>
-                            {% endfor %}
-                        </select>
+            <div class="columns">
+
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="source">Source</label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="source" name="source" required>
+                                    <option value="" disabled selected>Select the source</option>
+                                    {% for source in sources %}
+                                    <option value="{{ source.value }}">{{ source.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="genre">Genre</label>
+                        <div class="control">
+                            <div class="select">
+                                <select id="genre" name="genre" required>
+                                    <option value="" disabled selected>Select the genre</option>
+                                    {% for genre in genres %}
+                                    <option value="{{ genre.value }}">{{ genre.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="field">
-                <label class="label" for="genre">Genre</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="genre" name="genre" required>
-                            <option value="" disabled selected>Select the genre</option>
-                            {% for genre in genres %}
-                            <option value="{{ genre.value }}">{{ genre.value }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
 
             <div class="field">
                 <div class="control">
@@ -47,7 +56,31 @@
             </div>
         </form>
 
-        <div id="message" class="notification is-hidden"></div>
+        <h2 class="title mt-4">Available Sources</h2>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Source Name</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BIQUGE1</td>
+                    <td><a href="https://www.xbiqugew.com" target="_blank">https://www.xbiqugew.com</a></td>
+                </tr>
+                <tr>
+                    <td>BIQUGE2</td>
+                    <td><a href="https://bqghh.cc" target="_blank">https://bqghh.cc</a></td>
+                </tr>
+                <tr>
+                    <td>PIAOTIAN</td>
+                    <td><a href="https://www.piaotia.com" target="_blank">https://www.piaotia.com</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+
     </div>
 </section>
 
