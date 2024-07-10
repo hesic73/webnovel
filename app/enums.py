@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class Genre(Enum):
@@ -22,4 +22,9 @@ class Genre(Enum):
 class UserType(Enum):
     COMMON = "common"
     ADMIN = "admin"
-    
+
+
+class ScraperSource(Enum):
+    BIQUGE1 = auto()
+    BIQUGE2 = auto()
+    PIAOTIAN = auto()

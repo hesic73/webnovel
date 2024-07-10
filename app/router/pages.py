@@ -6,6 +6,7 @@ from app.database import DBDependency
 from app import database
 
 from app.utils import convert_db_novel_to_model_novel
+from app.enums import Genre, ScraperSource
 
 from app.schema.chapter import Chapter as ModelChapter
 
@@ -129,7 +130,7 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
 
 @router.get("/register_form.html", response_class=HTMLResponse)
 async def register_form(request: Request):
-    return templates.TemplateResponse("register_form.html.jinja", {
+    return templates.TemplateResponse("auth/register_form.html.jinja", {
         "request": request,
         'title': '注册',
     })
@@ -137,7 +138,7 @@ async def register_form(request: Request):
 
 @router.get("/login_form.html", response_class=HTMLResponse)
 async def login_form(request: Request):
-    return templates.TemplateResponse("login_form.html.jinja", {
+    return templates.TemplateResponse("auth/login_form.html.jinja", {
         "request": request,
         'title': '登录',
     })
@@ -165,4 +166,14 @@ async def author(request: Request, author_id: int, db: DBDependency):
         'author': author,
         'novels': novels,
         'title': f"{author.name} - 作品列表",
+    })
+
+
+@router.get("/scrape_form.html", response_class=HTMLResponse)
+async def scrape_form(request: Request):
+    return templates.TemplateResponse("scrape_form.html.jinja", {
+        "request": request,
+        "title": "爬取小说",
+        "genres": Genre,
+        "sources": ScraperSource
     })
