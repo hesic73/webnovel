@@ -1,0 +1,14 @@
+{% extends "base.html.jinja" %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="notification is-danger">
+            <h1 class="title">Error: {{ title }}</h1>
+            {% if message%}
+            <p>{{ message }}</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

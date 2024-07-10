@@ -12,8 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error.detail || 'Unknown error');
+                });
+            }
+            return response.json();
+        })
         .then(data => {
+
             const title = document.getElementById('bookshelf-title');
             title.textContent = `${data.username}的书架`;
 
@@ -38,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error('Error fetching bookshelf data:', error);
             const table = document.getElementById('bookshelf-table');
-            table.innerHTML = '<tr><td colspan="5">加载失败，请稍后重试。</td></tr>';
+            table.innerHTML = `<tr><td colspan="5">加载失败，请稍后重试。错误详情: ${error.message}</td></tr>`;
         });
 });
 

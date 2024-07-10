@@ -1,5 +1,9 @@
 from sqlalchemy.orm import Session
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse, JSONResponse
+
+from authx.exceptions import MissingTokenError, JWTDecodeError
 
 from app import database
 
@@ -123,3 +127,42 @@ async def lifespan(app: FastAPI):
     logging.info("Shutting down executor")
     executor.shutdown(wait=True)
     logging.info("Shutdown complete")
+
+
+templates = Jinja2Templates(directory="templates")
+
+
+def nl2br(value: str) -> str:
+    return value.replace('\n', '<br>\n')
+
+
+templates.env.filters['nl2br'] = nl2br
+
+
+class PageErrorException(Exception):
+    def __init__(self, status_code: int, title: str, message: str | None = None):
+        self.status_code = status_code
+        self.title = title
+        self.message = message
+
+
+def initialize_exception_handler(app: FastAPI):
+    @app.exception_handler(PageErrorException)
+    async def page_error_exception_handler(request: Request, exc: PageErrorException):
+        return templates.TemplateResponse(
+            "error.html.jinja",
+            {
+                "request": request,
+                "title": exc.title,
+                "message": exc.message
+            },
+            status_code=exc.status_code
+        )
+
+    @app.exception_handler(MissingTokenError)
+    async def missing_token_error_handler(request: Request, exc: MissingTokenError):
+        return JSONResponse(content={"detail": str(exc)}, status_code=401)
+
+    @app.exception_handler(JWTDecodeError)
+    async def jwt_decode_error_handler(request: Request, exc: JWTDecodeError):
+        return JSONResponse(content={"detail": str(exc)}, status_code=401)

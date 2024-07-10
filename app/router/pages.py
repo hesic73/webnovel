@@ -1,25 +1,17 @@
 from fastapi import Request, APIRouter, Query
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+
 
 from app.database import DBDependency
 from app import database
 
-from app.utils import convert_db_novel_to_model_novel
+from app.utils import convert_db_novel_to_model_novel, templates, PageErrorException
 from app.enums import Genre, ScraperSource
 
 from app.schema.chapter import Chapter as ModelChapter
 
 router = APIRouter(tags=["Pages"])
 
-templates = Jinja2Templates(directory="templates")
-
-
-def nl2br(value: str) -> str:
-    return value.replace('\n', '<br>\n')
-
-
-templates.env.filters['nl2br'] = nl2br
 
 _DEFAULT_NOVEL_PAGE_SIZE = 20
 _DEFAULT_CHAPTER_PAGE_SIZE = 100
@@ -52,6 +44,10 @@ async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
 @router.get("/novel/{id}/", response_class=HTMLResponse)
 async def novel(request: Request, id: int, db: DBDependency):
     novel = database.get_novel(db, novel_id=id)
+
+    if not novel:
+        raise PageErrorException(404, "Novel not found")
+
     novel = convert_db_novel_to_model_novel(db, novel)
 
     first_chapter = database.get_first_chapter(db, novel_id=id)
@@ -97,11 +93,11 @@ async def chapters(request: Request, id: int, db: DBDependency, page: int = Quer
 async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDependency):
     novel = database.get_novel_with_chapters(db, novel_id=novel_id)
     if not novel:
-        return HTMLResponse(status_code=404, content="Novel not found")
+        raise PageErrorException(404, "Novel not found")
 
     chapter = next((ch for ch in novel.chapters if ch.id == chapter_id), None)
     if not chapter:
-        return HTMLResponse(status_code=404, content="Chapter not found")
+        raise PageErrorException(404, "Chapter not found")
 
     chapter_model = ModelChapter(**chapter.__dict__)
     novel_model = convert_db_novel_to_model_novel(db, novel)
@@ -156,7 +152,7 @@ async def bookshelf(request: Request):
 async def author(request: Request, author_id: int, db: DBDependency):
     author = database.get_author_with_novels(db, author_id)
     if not author:
-        return HTMLResponse(status_code=404, content="Author not found")
+        raise PageErrorException(404, "Author not found")
 
     novels = author.novels
     novels = [convert_db_novel_to_model_novel(db, novel) for novel in novels]

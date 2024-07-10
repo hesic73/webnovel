@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.router import api, pages, auth, admin_api
 
-from app.utils import lifespan
+from app.utils import lifespan, initialize_exception_handler
 
 from app.admin import initialize_admin
 from app.securities import initialize_auth
@@ -12,6 +12,8 @@ app = FastAPI(title="网络小说阅读网站", lifespan=lifespan)
 
 initialize_admin(app)
 initialize_auth(app)
+
+initialize_exception_handler(app)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
