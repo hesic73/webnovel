@@ -14,18 +14,11 @@
                 <div class="custom-border-novel mt-3 p-0" id="list">
                     <dt class="has-text-centered p-1">《{{novel.title}}》目录</dt>
 
-                    {% set remainder = (4 - (chapters|length % 4)) % 4 %}
-                    {% set padded_chapters = chapters + [None] * remainder %}
-
-                    <div class="fixed-grid has-4-cols">
-                        <div class="grid is-size-6">
-                            {% for chapter in padded_chapters %}
-                            {% if chapter%}
+                    <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
+                        <div class="grid is-size-6" id="chapters-container">
+                            {% for chapter in chapters %}
                             <dd class="cell"><a class="custom-link-list"
                                     href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{ chapter.title }}</a></dd>
-                            {% else %}
-                            <dd class="cell"></dd>
-                            {% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -41,4 +34,5 @@
 
     </div>
 </section>
+<script src="/static/js/pad_cells.js"></script>
 {% endblock %}

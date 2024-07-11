@@ -57,8 +57,8 @@
                 <div class="custom-border-novel mt-3 p-0" id="list">
                     <dt class="has-text-centered p-1">《{{novel.title}}》最新章节</dt>
 
-                    <div class="fixed-grid has-4-cols">
-                        <div class="grid is-size-6">
+                    <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
+                        <div class="grid is-size-6" id="chapters-container">
                             {% for chapter in latest_chapters %}
                             {% if chapter%}
                             <dd class="cell"><a class="custom-link-list"
@@ -83,5 +83,6 @@
 
     </div>
 </section>
-<script src="/static/js/common.js"></script>
+<script src="/static/js/add_bookmark.js"></script>
+<script src="/static/js/pad_cells.js"></script>
 {% endblock %}
