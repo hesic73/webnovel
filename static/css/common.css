@@ -1,3 +1,7 @@
+.grid {
+    --bulma-grid-gap: 0.25rem;
+}
+
 html,
 body {
     min-height: 100%;
@@ -42,6 +46,34 @@ table td {
 }
 
 
+#intro {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #b2b2b2;
+    line-height: 180%
+}
+
+
+#list dt {
+    overflow: hidden;
+    background: none repeat scroll 0 0 #c3dfea;
+    font-size: 14px;
+    line-height: 28px
+}
+
+#list dd {
+    float: left;
+    overflow: hidden;
+    border-bottom: 1px dashed #ccc;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 200%;
+}
 
 .custom-footer {
     background-color: #e9faff;
@@ -83,8 +115,19 @@ table td {
 }
 
 
-.custom-border {
+.custom-border-chapter {
     border: 3px solid #c3dfea;
     /* border-radius: 0.5rem; */
     padding: 1rem;
+}
+
+.custom-border-novel {
+    border: 2px solid #88c6e5;
+    /* border-radius: 0.5rem; */
+    padding: 1rem;
+}
+
+
+.spacer {
+    height: 10vh;
 }

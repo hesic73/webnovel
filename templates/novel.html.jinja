@@ -7,8 +7,8 @@
 
 
         <div class="columns is-mobile is-centered">
-            <div class="column is-8-fullhd is-9-widescreen is-10-desktop">
-                <div class="custom-border">
+            <div class="column is-10-fullhd is-11-widescreen">
+                <div class="custom-border-novel">
 
                     <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
                         <ul>
@@ -18,30 +18,69 @@
                     </div>
 
                     <div class="content">
-                        <p><span class="is-size-3 has-text-weight-bold">{{ novel.title }}</span>&nbsp;&nbsp;<span><a
-                                    href="/author/{{novel.author.id}}/"
-                                    style="color: inherit; text-decoration: none;">{{
-                                    novel.author.name }}</a></span></p>
-                        <p class="tag">{{ novel.genre.value }}</p>
-                        <p>{{ novel.description | safe }}</p>
-                        <!-- Buttons section -->
-                        <div class="is-size-5 has-text-centered">
-                            <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
-                            {% if first_chapter %}
-                            <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="custom-link-chapter">开始阅读</a>
-                            {% else %}
-                            <span class="custom-link-chapter" disabled>开始阅读</span>
-                            {% endif %}
-                            <button href="/bookmark" class="custom-link-chapter"
-                                onclick="addBookmark({{ novel.id }})">加入书架</button>
+                        <p><span class="is-size-4 has-text-weight-bold">{{ novel.title }}</span></p>
+                        <div class="fixed-grid">
+                            <div class="grid">
+                                <p class="cell m-0">作者： <a class="custom-link-chapter"
+                                        href="/author/{{novel.author.id}}/">{{
+                                        novel.author.name }}</a></p>
+                                <p class="cell m-0">分类： {{ novel.genre.value }}</p>
+
+                                <p class="cell m-0">动作：
+                                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
+                                    {% if first_chapter %}
+                                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html"
+                                        class="custom-link-chapter">开始阅读</a>
+                                    {% else %}
+                                    <span class="custom-link-chapter" disabled>开始阅读</span>
+                                    {% endif %}
+                                    <button href="/bookmark" class="custom-link-chapter"
+                                        onclick="addBookmark({{ novel.id }})">加入书架</button>
+                                </p>
+                                {% if last_chapter%}
+                                <p class="cell m-0">最新： <a href="/novel/{{novel.id}}/{{last_chapter.id}}.html"
+                                        class="custom-link-chapter">{{last_chapter.title}}</a></p>
+                                {% endif %}
+
+                            </div>
                         </div>
+
+                        <p id="intro">{{ novel.description | safe }}</p>
+
+                        <!-- Buttons section -->
+
                     </div>
 
 
                 </div>
 
+                <div class="custom-border-novel mt-3 p-0" id="list">
+                    <dt class="has-text-centered p-1">《{{novel.title}}》最新章节</dt>
+
+                    <div class="fixed-grid has-4-cols">
+                        <div class="grid is-size-6">
+                            {% for chapter in latest_chapters %}
+                            {% if chapter%}
+                            <dd class="cell"><a class="custom-link-list"
+                                    href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{ chapter.title }}</a></dd>
+                            {% else %}
+                            <dd class="cell"></dd>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="spacer"></div>
+                    <div class="spacer"></div>
+                </div>
+
+
+
+
             </div>
         </div>
+
     </div>
 </section>
 <script src="/static/js/common.js"></script>

@@ -46,6 +46,14 @@ def get_chapters(db: Session, novel_id: int, skip: int = 0, limit: int = 10):
     return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number).offset(skip).limit(limit).all()
 
 
+def get_all_chapters(db: Session, novel_id: int):
+    return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number).all()
+
+
+def get_chapters_reversed(db: Session, novel_id: int, skip: int = 0, limit: int = 10):
+    return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number.desc()).offset(skip).limit(limit).all()
+
+
 def get_total_chapters_count(db: Session, novel_id: int) -> int:
     return db.query(Chapter).filter(Chapter.novel_id == novel_id).count()
 
@@ -86,3 +94,7 @@ def get_next_chapter(db: Session, novel_id: int, chapter_number: int):
 
 def get_first_chapter(db: Session, novel_id: int):
     return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number.asc()).first()
+
+
+def get_last_chapter(db: Session, novel_id: int):
+    return db.query(Chapter).filter(Chapter.novel_id == novel_id).order_by(Chapter.chapter_number.desc()).first()

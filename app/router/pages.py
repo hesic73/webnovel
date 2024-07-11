@@ -15,6 +15,7 @@ router = APIRouter(tags=["Pages"])
 
 _DEFAULT_NOVEL_PAGE_SIZE = 20
 _DEFAULT_CHAPTER_PAGE_SIZE = 100
+_LATEST_CHAPTERS_LIMIT = 20
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -54,23 +55,31 @@ async def novel(request: Request, id: int, db: DBDependency):
     first_chapter = ModelChapter(
         **first_chapter.__dict__) if first_chapter else None
 
+    last_chapter = database.get_last_chapter(db, novel_id=id)
+    last_chapter = ModelChapter(
+        **last_chapter.__dict__) if last_chapter else None
+
+    latest_chapters = database.get_chapters_reversed(
+        db, novel_id=id, limit=_LATEST_CHAPTERS_LIMIT)
+    latest_chapters = [ModelChapter(**chapter.__dict__) if chapter else None
+                       for chapter in latest_chapters]
+
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
         'novel': novel,
         'title': f'{novel.title} - {novel.author.name}',
         'first_chapter': first_chapter,
+        'last_chapter': last_chapter,
+        'latest_chapters': latest_chapters,
     })
 
 
 @router.get("/novel/{id}/chapters/", response_class=HTMLResponse)
-async def chapters(request: Request, id: int, db: DBDependency, page: int = Query(1, ge=1), page_size: int = Query(_DEFAULT_CHAPTER_PAGE_SIZE, ge=1, le=100)):
-    skip = (page - 1) * page_size
-
-    chapters = database.get_chapters(
-        db, novel_id=id, skip=skip, limit=page_size)
+async def chapters(request: Request, id: int, db: DBDependency):
+    chapters = database.get_all_chapters(
+        db, novel_id=id)
     chapters = [ModelChapter(**chapter.__dict__) for chapter in chapters]
     # Add a function to get the total count of chapters for a novel
-    total_chapters = database.get_total_chapters_count(db, novel_id=id)
-    total_pages = (total_chapters + page_size - 1) // page_size
+    # total_chapters = database.get_total_chapters_count(db, novel_id=id)
 
     novel = database.get_novel(db, novel_id=id)
     novel = convert_db_novel_to_model_novel(db, novel)
@@ -80,9 +89,6 @@ async def chapters(request: Request, id: int, db: DBDependency, page: int = Quer
         name="chapters.html.jinja",
         context={
             'chapters': chapters,
-            'page': page,
-            'total_pages': total_pages,
-            'page_size': page_size,
             'novel': novel,
             'title': f'{novel.title} - 章节目录',
         }
