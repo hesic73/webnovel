@@ -52,3 +52,7 @@ def remove_novel_from_reading_entry(db: Session, user_id: int, novel_id: int):
         db.delete(reading_entry)
         db.commit()
     return reading_entry
+
+
+def count_user_reading_entries(db: Session, user_id: int):
+    return db.query(ReadingEntry).filter_by(user_id=user_id).count()

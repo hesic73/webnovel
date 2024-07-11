@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 row.innerHTML = `
                 <td><a href="/novel/${entry.novel_id}/">${entry.title}</a></td>
-                <td>${entry.author}</td>
+                <td><a href="/author/${entry.author.id}/">${entry.author.name}</td>
                 <td>${chapterLink}</td>
-                <td><button class="button is-small is-danger" onclick="removeFromBookshelf(${entry.novel_id})">移除书架</button></td>
+                <td><button class="button is-normal is-danger" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
             `;
                 table.appendChild(row);
             });

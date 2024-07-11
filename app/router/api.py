@@ -12,6 +12,9 @@ from app.securities import TokenPayloadDependency
 from app.enums import Genre
 
 
+BOOKSHELF_SIZE = 10
+
+
 router = APIRouter()
 
 
@@ -23,7 +26,6 @@ class BookshelfInfo(BaseModel):
 @router.get("/bookshelf/", response_model=BookshelfInfo)
 async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
     username = payload.sub
-    user_name = payload.sub
 
     user = database.get_user_by_username(db=db, username=username)
 
@@ -42,7 +44,10 @@ async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
             "id": entry.id,
             "novel_id": entry.novel_id,
             "title": entry.novel.title,
-            "author": entry.novel.author.name,
+            "author": {
+                "id": entry.novel.author.id,
+                "name": entry.novel.author.name
+            },
             "chapter_id": entry.current_chapter.id if entry.current_chapter else None,
             "chapter_name": entry.current_chapter.title if entry.current_chapter else None
         }
@@ -93,14 +98,21 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, payload: Tok
             reading_entry.current_chapter_id = bookmark.chapter_id
             db.commit()
             db.refresh(reading_entry)
-    else:
-        # Create a new reading entry
-        reading_entry = database.create_reading_entry(
-            db=db,
-            user_id=user_id,
-            novel_id=bookmark.novel_id,
-            current_chapter_id=bookmark.chapter_id
-        )
+
+        return reading_entry
+
+    count = database.count_user_reading_entries(db=db, user_id=user_id)
+
+    if count >= BOOKSHELF_SIZE:
+        raise HTTPException(
+            status_code=400, detail=f"User has reached the maximum bookshelf size of {BOOKSHELF_SIZE}")
+
+    reading_entry = database.create_reading_entry(
+        db=db,
+        user_id=user_id,
+        novel_id=bookmark.novel_id,
+        current_chapter_id=bookmark.chapter_id
+    )
 
     return reading_entry
 

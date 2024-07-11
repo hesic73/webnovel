@@ -29,11 +29,14 @@ function addBookmark(novelId, chapterId = null) {
             if (response.ok) {
                 alert('书签已更新');
             } else {
-                throw new Error('Failed to update bookmark');
+                return response.json().then(error => {
+                    throw new Error(error.detail || 'Unknown error');
+                });
             }
         })
         .catch(error => {
-            console.error('Error updating bookmark:', error);
-            alert('更新书签时出错');
+            console.error('Error updating bookmark:', error.message);
+            alert('更新书签时出错: ' + error.message);
         });
+
 }
