@@ -16,7 +16,7 @@
             <tbody>
                 {% for novel in novels %}
                 <tr>
-                    <td><a href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
+                    <td><a class="custom-link-chapter" href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
                     <td>{{ author.name }}</td>
                 </tr>
                 {% endfor %}

@@ -31,14 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
             data.entries.forEach(entry => {
                 const row = document.createElement('tr');
                 const chapterLink = entry.chapter_id && entry.chapter_name
-                    ? `<a href="/novel/${entry.novel_id}/${entry.chapter_id}.html">${entry.chapter_name}</a>`
+                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.chapter_id}.html">${entry.chapter_name}</a>`
                     : '';
 
                 row.innerHTML = `
-                <td><a href="/novel/${entry.novel_id}/">${entry.title}</a></td>
-                <td><a href="/author/${entry.author.id}/">${entry.author.name}</td>
+                <td><a class="custom-link-chapter" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
+                <td><a class="custom-link-chapter" href="/author/${entry.author.id}/">${entry.author.name}</td>
                 <td>${chapterLink}</td>
-                <td><button class="button is-normal is-danger" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
+                <td><button class="custom-link-chapter" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
             `;
                 table.appendChild(row);
             });

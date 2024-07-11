@@ -5,10 +5,11 @@
 
     <div class="container">
         <div>
-            <nav class="breadcrumb" aria-label="breadcrumbs">
+            <nav class="breadcrumb mb-2" aria-label="breadcrumbs">
                 <ul>
-                    <li><a href="/">网络小说阅读网站</a></li>
-                    <li class="is-active"><a href="/novel/{{ novel.id }}/" aria-current="page">{{novel.title}}</a></li>
+                    <li><a class="custom-link-list" href="/">网络小说阅读网站</a></li>
+                    <li class="custom-link-list is-active"><a href="/novel/{{ novel.id }}/"
+                            aria-current="page">{{novel.title}}</a></li>
                 </ul>
             </nav>
         </div>
@@ -20,14 +21,14 @@
                 <p class="tag">{{ novel.genre.value }}</p>
                 <p>{{ novel.description | safe }}</p>
                 <!-- Buttons section -->
-                <div class="buttons">
-                    <a href="/novel/{{ novel.id }}/chapters/" class="button is-primary is-large">章节目录</a>
+                <div class="is-size-4 has-text-centered">
+                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
                     {% if first_chapter %}
-                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="button is-link is-large">开始阅读</a>
+                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="custom-link-chapter">开始阅读</a>
                     {% else %}
-                    <span class="button is-link is-large" disabled>开始阅读</span>
+                    <span class="custom-link-chapter" disabled>开始阅读</span>
                     {% endif %}
-                    <button href="/bookmark" class="button is-danger is-large"
+                    <button href="/bookmark" class="custom-link-chapter"
                         onclick="addBookmark({{ novel.id }})">加入书架</button>
                 </div>
             </div>

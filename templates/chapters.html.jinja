@@ -3,8 +3,8 @@
 {% block content %}
 <section class="section">
     <div class="container">
-        <div class="buttons">
-            <a class="button is-primary" href="/novel/{{ novel.id }}/">返回书页</a>
+        <div class="mb-2">
+            <a class="custom-link-chapter" href="/novel/{{ novel.id }}/">返回书页</a>
         </div>
         <h1 class="title">章节目录</h1>
 
@@ -13,7 +13,7 @@
             <div class="columns is-multiline">
                 {% for chapter in chapters %}
                 <div class="column is-one-quarter py-0">
-                    <a class="custom-link" href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{ chapter.title }}</a>
+                    <a class="custom-link-list" href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{ chapter.title }}</a>
                 </div>
                 {% endfor %}
             </div>
