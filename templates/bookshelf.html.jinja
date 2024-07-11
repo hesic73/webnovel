@@ -3,22 +3,28 @@
 {% block content %}
 <section class="section">
     <div class="container">
-        <h1 class="title" id="bookshelf-title">书架</h1>
-        <table class="table is-fullwidth is-striped">
-            <thead>
-                <tr>
-                    <th>小说</th>
-                    <th>作者</th>
-                    <th>书签</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody id="bookshelf-table">
-                <tr>
-                    <td colspan="5">加载中...</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="columns is-mobile is-centered">
+            <div class="column is-8-fullhd is-9-widescreen is-10-desktop">
+
+                <table class="table is-fullwidth is-striped">
+                    <caption id="bookshelf-title">书架</caption>
+                    <thead>
+                        <tr>
+                            <th>小说</th>
+                            <th>作者</th>
+                            <th>书签</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookshelf-table">
+                        <tr>
+                            <td colspan="5">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </div>
 </section>
 

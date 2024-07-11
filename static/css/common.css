@@ -11,6 +11,38 @@ body {
     font-family: "宋体", "Microsoft YaHei", "微软雅黑";
 }
 
+table {
+    text-align: left;
+    font: 12px/120% 宋体, Verdana, Arial, sans-serif
+}
+
+table caption {
+    border: 1px solid #a3bee8;
+    background: #e9f1f8;
+    color: #054e86;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 3px;
+    margin: auto;
+}
+
+table th {
+    border: 1px solid #a3bee8 !important;
+    background: #f0f7ff !important;
+    color: #054e86 !important;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 3px
+}
+
+table td {
+    border: 1px solid #a3bee8 !important;
+    background-color: #fff !important;
+}
+
+
+
 .custom-footer {
     background-color: #e9faff;
 
@@ -22,11 +54,12 @@ body {
 
 /* 上一章/下一章/加入书架 */
 .custom-link-chapter {
-    color: #6f78a7;
+    color: #6f78a7 !important;
     text-decoration: none;
 }
 
 .custom-link-chapter:hover {
+    color: #f60 !important;
     text-decoration: underline;
 }
 
@@ -38,14 +71,20 @@ body {
 
 .custom-link-list:hover {
     text-decoration: underline;
+    color: #444 !important;
 }
 
 .custom-link-list:visited {
     color: #999;
 }
 
+.custom-link-list:visited:hover {
+    color: #999 !important;
+}
+
+
 .custom-border {
     border: 3px solid #c3dfea;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     padding: 1rem;
 }

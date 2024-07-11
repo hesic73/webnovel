@@ -3,26 +3,29 @@
 {% block content %}
 <section class="section">
     <div class="container">
+        <div class="columns is-mobile is-centered">
+            <div class="column is-8-fullhd is-9-widescreen is-10-desktop">
 
-        <h1 class="title has-text-centered">{{ author.name }}的文章列表</h1>
+                <table class="table is-fullwidth is-bordered">
+                    <caption>{{ author.name }}的文章列表</caption>
+                    <thead>
+                        <tr>
+                            <th>文章名称</th>
+                            <th>作者</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for novel in novels %}
+                        <tr>
+                            <td><a class="custom-link-chapter" href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
+                            <td>{{ author.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-        <table class="table is-fullwidth is-striped">
-            <thead>
-                <tr>
-                    <th>文章名称</th>
-                    <th>作者</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for novel in novels %}
-                <tr>
-                    <td><a class="custom-link-chapter" href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
-                    <td>{{ author.name }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

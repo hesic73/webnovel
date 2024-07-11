@@ -4,23 +4,22 @@
 <section class="section">
     <div class="container">
 
-        <nav class="breadcrumb mb-2" aria-label="breadcrumbs">
-            <ul>
-                <li><a class="custom-link-list" href="/">网络小说阅读网站</a></li>
-                <li><a class="custom-link-list" href="/novel/{{ novel.id }}/">{{novel.title}}</a></li>
-                <li class="custom-link-list is-active"><a href="#" aria-current="page">{{chapter.title}}</a></li>
-            </ul>
-        </nav>
-
-
-
         <div class="columns is-mobile is-centered">
             <div class="column is-8-fullhd is-9-widescreen is-10-desktop">
                 <div class="custom-border">
 
+                    <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
+                        <ul>
+                            <li><a class="custom-link-chapter px-0" href="/">网络小说阅读网站</a></li>
+                            <li><a class="custom-link-chapter px-0" href="/novel/{{ novel.id }}/">{{novel.title}}</a>
+                            </li>
+                            <li class="is-active"><span>{{chapter.title}}</span></li>
+                        </ul>
+                    </div>
+
                     <h1 class="title has-text-centered mt-2">{{ chapter.title }}</h1>
 
-                    <div class="is-size-5 has-text-centered mb-4">
+                    <div class="is-size-6 has-text-centered mb-4">
                         {% if previous_chapter %}
                         <a id="previous-chapter" class="custom-link-chapter"
                             href="/novel/{{ novel.id }}/{{ previous_chapter.id }}.html">上一章</a>
