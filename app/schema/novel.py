@@ -10,4 +10,4 @@ class Novel(BaseModel):
     title: str
     author: Author
     genre: Genre
-    description: str
+    description: str | None
