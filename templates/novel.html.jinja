@@ -36,7 +36,11 @@
             </div>
         </div>
 
+        {% if novel.description %}
         <p id="intro">{{ novel.description | safe }}</p>
+        {% else %}
+        <p id="intro">暂无简介</p>
+        {% endif %}
 
         <!-- Buttons section -->
 
