@@ -14,16 +14,14 @@ from app.enums import Genre, ScraperSource
 from app.schema.novel import Novel
 from app.schema.chapter import Chapter
 
+from app.consts import DEFAULT_NOVEL_PAGE_SIZE, LATEST_CHAPTERS_LIMIT
+
 router = APIRouter(tags=["Pages"], include_in_schema=False)
-
-
-_DEFAULT_NOVEL_PAGE_SIZE = 20
-_LATEST_CHAPTERS_LIMIT = 20
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
-                page_size: int = Query(_DEFAULT_NOVEL_PAGE_SIZE, ge=1, le=100)):
+                page_size: int = Query(DEFAULT_NOVEL_PAGE_SIZE, ge=1, le=100)):
     skip = (page - 1) * page_size
 
     novels = database.get_novels(db, skip=skip, limit=page_size)
@@ -63,7 +61,7 @@ async def novel(request: Request, id: int, db: DBDependency):
         last_chapter) if last_chapter else None
 
     latest_chapters = database.get_chapters_reversed(
-        db, novel_id=id, limit=_LATEST_CHAPTERS_LIMIT)
+        db, novel_id=id, limit=LATEST_CHAPTERS_LIMIT)
     latest_chapters = [convert_db_chapter_to_model_chapter(chapter) if chapter else None
                        for chapter in latest_chapters]
 

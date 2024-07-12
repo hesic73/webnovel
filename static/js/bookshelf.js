@@ -31,20 +31,20 @@ document.addEventListener("DOMContentLoaded", function () {
             data.entries.forEach(entry => {
                 const row = document.createElement('tr');
                 const chapterLink = entry.bookmarked_chapter
-                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.bookmarked_chapter.id}.html">${entry.bookmarked_chapter.title}</a>`
+                    ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.bookmarked_chapter.id}.html">${entry.bookmarked_chapter.title}</a>`
                     : '';
 
 
                 const latestChapterLink = entry.latest_chapter
-                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.latest_chapter.id}.html">${entry.latest_chapter.title}</a>`
+                    ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.latest_chapter.id}.html">${entry.latest_chapter.title}</a>`
                     : '';
 
                 row.innerHTML = `
-                <td><a class="custom-link-chapter" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
-                <td><a class="custom-link-chapter" href="/author/${entry.author.id}/">${entry.author.name}</td>
+                <td><a class="custom-link-normal" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
+                <td><a class="custom-link-normal" href="/author/${entry.author.id}/">${entry.author.name}</td>
                 <td>${latestChapterLink}</td>
                 <td>${chapterLink}</td>
-                <td><button class="custom-link-chapter" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
+                <td><button class="custom-link-normal" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
             `;
                 table.appendChild(row);
             });

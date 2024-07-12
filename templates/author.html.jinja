@@ -14,12 +14,12 @@
     <tbody>
         {% for entry in entries %}
         <tr>
-            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/">{{ entry.novel.title
+            <td><a class="custom-link-normal" href="/novel/{{ entry.novel.id }}/">{{ entry.novel.title
                     }}</a></td>
             <td>{{ author.name }}</td>
 
             {%if entry.latest_chapter %}
-            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/{{ entry.latest_chapter.id }}.html">{{
+            <td><a class="custom-link-normal" href="/novel/{{ entry.novel.id }}/{{ entry.latest_chapter.id }}.html">{{
                     entry.latest_chapter.title
                     }}</a></td>
 

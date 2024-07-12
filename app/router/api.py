@@ -13,9 +13,7 @@ from app.securities import TokenPayloadDependency
 
 from app.enums import Genre
 
-
-BOOKSHELF_SIZE = 10
-
+from app.consts import BOOKSHELF_SIZE
 
 router = APIRouter()
 

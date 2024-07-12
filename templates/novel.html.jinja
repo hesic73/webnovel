@@ -5,7 +5,7 @@
 
     <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
         <ul>
-            <li><a class="custom-link-chapter px-0" href="/">网络小说阅读网站</a></li>
+            <li><a class="custom-link-normal px-0" href="/">网络小说阅读网站</a></li>
             <li class="is-active"><span>{{novel.title}}</span></li>
         </ul>
     </div>
@@ -14,23 +14,23 @@
         <p><span class="is-size-4 has-text-weight-bold">{{ novel.title }}</span></p>
         <div class="fixed-grid">
             <div class="grid">
-                <p class="cell m-0">作者： <a class="custom-link-chapter" href="/author/{{novel.author.id}}/">{{
+                <p class="cell m-0">作者： <a class="custom-link-normal" href="/author/{{novel.author.id}}/">{{
                         novel.author.name }}</a></p>
                 <p class="cell m-0">分类： {{ novel.genre.value }}</p>
 
                 <p class="cell m-0">动作：
-                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
+                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-normal">章节目录</a>
                     {% if first_chapter %}
-                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="custom-link-chapter">开始阅读</a>
+                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="custom-link-normal">开始阅读</a>
                     {% else %}
-                    <span class="custom-link-chapter" disabled>开始阅读</span>
+                    <span class="custom-link-normal" disabled>开始阅读</span>
                     {% endif %}
-                    <button href="/bookmark" class="custom-link-chapter"
+                    <button href="/bookmark" class="custom-link-normal"
                         onclick="addBookmark({{ novel.id }})">加入书架</button>
                 </p>
                 {% if last_chapter%}
                 <p class="cell m-0">最新： <a href="/novel/{{novel.id}}/{{last_chapter.id}}.html"
-                        class="custom-link-chapter">{{last_chapter.title}}</a></p>
+                        class="custom-link-normal">{{last_chapter.title}}</a></p>
                 {% endif %}
 
             </div>

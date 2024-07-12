@@ -85,12 +85,12 @@ table td {
 }
 
 /* 上一章/下一章/加入书架 */
-.custom-link-chapter {
+.custom-link-normal {
     color: #6f78a7 !important;
     text-decoration: none;
 }
 
-.custom-link-chapter:hover {
+.custom-link-normal:hover {
     color: #f60 !important;
     text-decoration: underline;
 }
@@ -177,4 +177,39 @@ table td {
     height: 2rem;
     display: block;
     color: #88c6e5 !important;
+}
+
+
+#novel_list {
+    border: 3px solid #C3DFEA;
+    background: #fafafa;
+    width: 100%;
+
+}
+
+
+#novel_list h1 {
+    overflow: hidden;
+    background-color: #E1ECED;
+    border-bottom: solid 1px #DDDDDD;
+
+}
+
+#novel_list li {
+    display: flex;
+    border-bottom: solid 1px #DDDDDD;
+    overflow: hidden;
+}
+
+#novel_list li span {
+    flex-basis: 30%;
+    text-align: left;
+}
+
+#novel_list li span.s2 {
+    flex-basis: 40%;
+}
+
+#novel_list li span.s3 {
+    flex-basis: 30%;
 }

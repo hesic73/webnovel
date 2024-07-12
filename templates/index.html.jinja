@@ -2,34 +2,70 @@
 
 {% block content %}
 
-<ul>
+<ul id="novel_list">
+    <h1 class="m-0 py-1 has-text-weight-bold">小说列表</h1>
     {% for novel in novels %}
-    <li>
-        <a href="/novel/{{ novel.id }}/" style="color: inherit; text-decoration: none;">
-            <strong>{{ novel.title }}</strong> </a> - <a href="/author/{{novel.author.id}}/"
-            style="color: inherit; text-decoration: none;">{{
-            novel.author.name }}</a> | {{ novel.genre.value
-        }}
+    <li class="pt-1">
+        <span class="s1">{{ novel.genre.value
+            }}</span>
+
+        <span class="s2"><a href="/novel/{{ novel.id }}/" class="custom-link-normal">
+                {{ novel.title }} </a></span>
+
+        <span class="s3"><a href="/author/{{novel.author.id}}/" class="custom-link-normal">{{
+                novel.author.name }}</a></span>
+
 
     </li>
     {% endfor %}
 </ul>
 
 <!-- Pagination controls -->
-<nav class="pagination" role="navigation" aria-label="pagination">
-    <a class="pagination-previous" {% if page <=1 %}disabled{% else
-        %}href="/?page={{ page - 1 }}&page_size={{ page_size }}" {% endif %}>上一页</a>
-    <a class="pagination-next" {% if page>= total_pages %}disabled{% else %}href="/?page={{ page + 1
-        }}&page_size={{ page_size }}"{% endif %}>下一页</a>
-    <ul class="pagination-list">
-        {% for p in range(1, total_pages + 1) %}
-        <li>
-            <a class="pagination-link {% if p == page %}is-current{% endif %}"
-                href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+<nav class="pagination mt-2 is-rounded" role="navigation" aria-label="pagination">
+    {% if page <= 1 %} <a class="pagination-previous" disabled> 上一页 </a>
+        {% else %}
+        <a class="pagination-previous" href="/?page={{ page - 1 }}&page_size={{ page_size }}"> 上一页 </a>
+        {% endif %}
+
+        {% if page >= total_pages %}
+        <a class="pagination-next" disabled> 下一页 </a>
+        {% else %}
+        <a class="pagination-next" href="/?page={{ page + 1 }}&page_size={{ page_size }}"> 下一页 </a>
+        {% endif %}
+
+        <ul class="pagination-list">
+            {% if total_pages <= 7 %} {% for p in range(1, total_pages + 1) %} <li>
+                <a class="pagination-link {% if p == page %}is-current{% endif %}"
+                    href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li>
+                    <a class="pagination-link {% if page == 1 %}is-current{% endif %}"
+                        href="/?page=1&page_size={{ page_size }}">1</a>
+                </li>
+                {% if page > 4 %}
+                <li><span class="pagination-ellipsis">&hellip;</span></li>
+                {% endif %}
+                {% for p in range([2, page - 2]|max, [total_pages, page + 2]|min + 1) %}
+                <li>
+                    <a class="pagination-link {% if p == page %}is-current{% endif %}"
+                        href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if page < total_pages - 3 %} <li><span class="pagination-ellipsis">&hellip;</span></li>
+                    {% endif %}
+                    {% if page + 2 < total_pages %} <li>
+                        <a class="pagination-link {% if page == total_pages %}is-current{% endif %}"
+                            href="/?page={{ total_pages }}&page_size={{ page_size }}">{{ total_pages }}</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+        </ul>
 </nav>
+
+
+
 
 
 {%endblock%}
