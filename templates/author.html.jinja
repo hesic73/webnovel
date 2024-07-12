@@ -1,43 +1,34 @@
 {% extends "base.html.jinja" %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns is-mobile is-centered">
-            <div class="is-10-fullhd is-11-widescreen">
 
-                <table class="table is-fullwidth is-bordered">
-                    <caption>{{ author.name }}的文章列表</caption>
-                    <thead>
-                        <tr>
-                            <th>文章名称</th>
-                            <th>作者</th>
-                            <th>最新章节</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in entries %}
-                        <tr>
-                            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/">{{ entry.novel.title
-                                    }}</a></td>
-                            <td>{{ author.name }}</td>
+<table class="table is-fullwidth is-bordered">
+    <caption>{{ author.name }}的文章列表</caption>
+    <thead>
+        <tr>
+            <th>文章名称</th>
+            <th>作者</th>
+            <th>最新章节</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/">{{ entry.novel.title
+                    }}</a></td>
+            <td>{{ author.name }}</td>
 
-                            {%if entry.latest_chapter %}
-                            <td><a class="custom-link-chapter"
-                                    href="/novel/{{ entry.novel.id }}/{{ entry.latest_chapter.id }}.html">{{
-                                    entry.latest_chapter.title
-                                    }}</a></td>
+            {%if entry.latest_chapter %}
+            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/{{ entry.latest_chapter.id }}.html">{{
+                    entry.latest_chapter.title
+                    }}</a></td>
 
-                            {% else %}
-                            <td></td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            {% else %}
+            <td></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}

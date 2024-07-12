@@ -1,39 +1,31 @@
 {% extends "base.html.jinja" %}
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered is-mobile">
-            <div class="column is-half-widescreen is-three-fifths-tablet is-10-mobile">
 
-                <h1 class="title">登录</h1>
+<h1 class="title">登录</h1>
 
-                <div id="notification" class="notification is-hidden"></div>
+<div id="notification" class="notification is-hidden"></div>
 
-                <form id="loginForm">
-                    <div class="field">
-                        <label class="label">电子邮箱</label>
-                        <div class="control">
-                            <input class="input" type="email" id="email" placeholder="请输入电子邮箱">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">密码</label>
-                        <div class="control">
-                            <input class="input" type="password" id="password" placeholder="请输入密码">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-light" type="button" onclick="loginUser()">登录</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
+<form id="loginForm">
+    <div class="field">
+        <label class="label">电子邮箱</label>
+        <div class="control">
+            <input class="input" type="email" id="email" placeholder="请输入电子邮箱">
         </div>
     </div>
-</section>
+
+    <div class="field">
+        <label class="label">密码</label>
+        <div class="control">
+            <input class="input" type="password" id="password" placeholder="请输入密码">
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <button class="button is-light" type="button" onclick="loginUser()">登录</button>
+        </div>
+    </div>
+</form>
+
 <script src="/static/js/login_form.js"></script>
 {% endblock %}

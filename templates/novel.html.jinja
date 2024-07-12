@@ -1,88 +1,71 @@
 {% extends "base.html.jinja" %}
 {% block content %}
-<!-- Novel details section -->
-<section class="section">
 
-    <div class="container">
+<div class="custom-border-novel">
 
+    <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
+        <ul>
+            <li><a class="custom-link-chapter px-0" href="/">网络小说阅读网站</a></li>
+            <li class="is-active"><span>{{novel.title}}</span></li>
+        </ul>
+    </div>
 
-        <div class="columns is-mobile is-centered">
-            <div class="column is-10-fullhd is-11-widescreen">
-                <div class="custom-border-novel">
+    <div class="content">
+        <p><span class="is-size-4 has-text-weight-bold">{{ novel.title }}</span></p>
+        <div class="fixed-grid">
+            <div class="grid">
+                <p class="cell m-0">作者： <a class="custom-link-chapter" href="/author/{{novel.author.id}}/">{{
+                        novel.author.name }}</a></p>
+                <p class="cell m-0">分类： {{ novel.genre.value }}</p>
 
-                    <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
-                        <ul>
-                            <li><a class="custom-link-chapter px-0" href="/">网络小说阅读网站</a></li>
-                            <li class="is-active"><span>{{novel.title}}</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="content">
-                        <p><span class="is-size-4 has-text-weight-bold">{{ novel.title }}</span></p>
-                        <div class="fixed-grid">
-                            <div class="grid">
-                                <p class="cell m-0">作者： <a class="custom-link-chapter"
-                                        href="/author/{{novel.author.id}}/">{{
-                                        novel.author.name }}</a></p>
-                                <p class="cell m-0">分类： {{ novel.genre.value }}</p>
-
-                                <p class="cell m-0">动作：
-                                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
-                                    {% if first_chapter %}
-                                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html"
-                                        class="custom-link-chapter">开始阅读</a>
-                                    {% else %}
-                                    <span class="custom-link-chapter" disabled>开始阅读</span>
-                                    {% endif %}
-                                    <button href="/bookmark" class="custom-link-chapter"
-                                        onclick="addBookmark({{ novel.id }})">加入书架</button>
-                                </p>
-                                {% if last_chapter%}
-                                <p class="cell m-0">最新： <a href="/novel/{{novel.id}}/{{last_chapter.id}}.html"
-                                        class="custom-link-chapter">{{last_chapter.title}}</a></p>
-                                {% endif %}
-
-                            </div>
-                        </div>
-
-                        <p id="intro">{{ novel.description | safe }}</p>
-
-                        <!-- Buttons section -->
-
-                    </div>
-
-
-                </div>
-
-                <div class="custom-border-novel mt-3 p-0" id="list">
-                    <dt class="has-text-centered p-1">《{{novel.title}}》最新章节</dt>
-
-                    <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
-                        <div class="grid is-size-6" id="chapters-container">
-                            {% for chapter in latest_chapters %}
-                            {% if chapter%}
-                            <dd class="cell"><a class="custom-link-list"
-                                    href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{ chapter.title }}</a></dd>
-                            {% else %}
-                            <dd class="cell"></dd>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-
-
-                    <div class="spacer"></div>
-                    <div class="spacer"></div>
-                </div>
-
-
-
+                <p class="cell m-0">动作：
+                    <a href="/novel/{{ novel.id }}/chapters/" class="custom-link-chapter">章节目录</a>
+                    {% if first_chapter %}
+                    <a href="/novel/{{novel.id}}/{{first_chapter.id}}.html" class="custom-link-chapter">开始阅读</a>
+                    {% else %}
+                    <span class="custom-link-chapter" disabled>开始阅读</span>
+                    {% endif %}
+                    <button href="/bookmark" class="custom-link-chapter"
+                        onclick="addBookmark({{ novel.id }})">加入书架</button>
+                </p>
+                {% if last_chapter%}
+                <p class="cell m-0">最新： <a href="/novel/{{novel.id}}/{{last_chapter.id}}.html"
+                        class="custom-link-chapter">{{last_chapter.title}}</a></p>
+                {% endif %}
 
             </div>
         </div>
 
+        <p id="intro">{{ novel.description | safe }}</p>
+
+        <!-- Buttons section -->
+
     </div>
-</section>
+
+
+</div>
+
+<div class="custom-border-novel mt-3 p-0" id="list">
+    <dt class="has-text-centered p-1">《{{novel.title}}》最新章节</dt>
+
+    <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
+        <div class="grid is-size-6" id="chapters-container">
+            {% for chapter in latest_chapters %}
+            {% if chapter%}
+            <dd class="cell"><a class="custom-link-list" href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{
+                    chapter.title }}</a></dd>
+            {% else %}
+            <dd class="cell"></dd>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+</div>
+
 <script src="/static/js/add_bookmark.js"></script>
 <script src="/static/js/pad_cells.js"></script>
 {% endblock %}

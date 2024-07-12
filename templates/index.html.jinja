@@ -1,52 +1,35 @@
 {% extends "base.html.jinja" %}
 
 {% block content %}
-<section class="section">
-    <div class="container">
-        <div class="columns">
-            <!-- Genre filter -->
-            <div class="column is-one-quarter">
-                <aside class="menu">
-                    <p class="menu-label">
-                        分类
-                    </p>
-                    <ul class="menu-list">
-                        <li><a class="is-active">全部</a></li>
-                    </ul>
-                </aside>
-            </div>
 
-            <div class="column">
-                <ul>
-                    {% for novel in novels %}
-                    <li>
-                        <a href="/novel/{{ novel.id }}/" style="color: inherit; text-decoration: none;">
-                            <strong>{{ novel.title }}</strong> </a> - <a href="/author/{{novel.author.id}}/"
-                            style="color: inherit; text-decoration: none;">{{
-                            novel.author.name }}</a> | {{ novel.genre.value
-                        }}
+<ul>
+    {% for novel in novels %}
+    <li>
+        <a href="/novel/{{ novel.id }}/" style="color: inherit; text-decoration: none;">
+            <strong>{{ novel.title }}</strong> </a> - <a href="/author/{{novel.author.id}}/"
+            style="color: inherit; text-decoration: none;">{{
+            novel.author.name }}</a> | {{ novel.genre.value
+        }}
 
-                    </li>
-                    {% endfor %}
-                </ul>
+    </li>
+    {% endfor %}
+</ul>
 
-                <!-- Pagination controls -->
-                <nav class="pagination" role="navigation" aria-label="pagination">
-                    <a class="pagination-previous" {% if page <=1 %}disabled{% else
-                        %}href="/?page={{ page - 1 }}&page_size={{ page_size }}" {% endif %}>上一页</a>
-                    <a class="pagination-next" {% if page>= total_pages %}disabled{% else %}href="/?page={{ page + 1
-                        }}&page_size={{ page_size }}"{% endif %}>下一页</a>
-                    <ul class="pagination-list">
-                        {% for p in range(1, total_pages + 1) %}
-                        <li>
-                            <a class="pagination-link {% if p == page %}is-current{% endif %}"
-                                href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- Pagination controls -->
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" {% if page <=1 %}disabled{% else
+        %}href="/?page={{ page - 1 }}&page_size={{ page_size }}" {% endif %}>上一页</a>
+    <a class="pagination-next" {% if page>= total_pages %}disabled{% else %}href="/?page={{ page + 1
+        }}&page_size={{ page_size }}"{% endif %}>下一页</a>
+    <ul class="pagination-list">
+        {% for p in range(1, total_pages + 1) %}
+        <li>
+            <a class="pagination-link {% if p == page %}is-current{% endif %}"
+                href="/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</nav>
+
+
 {%endblock%}
