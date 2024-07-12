@@ -9,6 +9,7 @@ from app import database
 
 from app.schema.novel import Novel as ModelNovel
 from app.schema.author import Author as ModelAuthor
+from app.schema.chapter import Chapter as ModelChapter
 
 from app.enums import Genre, ScraperSource
 
@@ -47,6 +48,15 @@ def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> Mo
     )
 
     return model_novel
+
+
+def convert_db_chapter_to_model_chapter(db_chapter: database.Chapter) -> ModelChapter:
+    return ModelChapter(
+        id=db_chapter.id,
+        novel_id=db_chapter.novel_id,
+        title=db_chapter.title,
+        content=db_chapter.content
+    )
 
 
 def make_scraper_function(source: ScraperSource):

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from .author import Author
+from .chapter import Chapter
 
 
 class ReadingEntryDisplay(BaseModel):
@@ -7,8 +8,8 @@ class ReadingEntryDisplay(BaseModel):
     novel_id: int
     title: str
     author: Author
-    chapter_id: int | None
-    chapter_name: str | None
+    bookmarked_chapter: Chapter | None
+    latest_chapter: Chapter | None
 
 
 class ReadingEntryDelete(BaseModel):

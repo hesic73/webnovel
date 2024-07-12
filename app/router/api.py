@@ -4,6 +4,8 @@ from pydantic import BaseModel
 
 from app.schema.reading_entry import ReadingEntryDisplay, ReadingEntryDelete, ReadingEntryUpdate
 from app.schema.novel import Novel
+from app.schema.chapter import Chapter
+from app.schema.author import Author
 from app.database import DBDependency
 from app import database
 
@@ -40,17 +42,24 @@ async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
     # Prepare the response data
     entries = []
     for entry in reading_entries:
-        e = {
-            "id": entry.id,
-            "novel_id": entry.novel_id,
-            "title": entry.novel.title,
-            "author": {
-                "id": entry.novel.author.id,
-                "name": entry.novel.author.name
-            },
-            "chapter_id": entry.current_chapter.id if entry.current_chapter else None,
-            "chapter_name": entry.current_chapter.title if entry.current_chapter else None
-        }
+        if entry.current_chapter:
+            bookmarked_chapter = Chapter(
+                id=entry.current_chapter.id, novel_id=entry.novel_id, title=entry.current_chapter.title)
+        else:
+            bookmarked_chapter = None
+
+        if _latest_chapter := database.get_last_chapter(
+                db=db, novel_id=entry.novel_id):
+            latest_chapter = Chapter(
+                id=_latest_chapter.id, novel_id=entry.novel_id, title=_latest_chapter.title)
+        else:
+            latest_chapter = None
+
+        e = ReadingEntryDisplay(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
+                                author=Author(
+                                    id=entry.novel.author.id, name=entry.novel.author.name),
+                                bookmarked_chapter=bookmarked_chapter, latest_chapter=latest_chapter)
+
         entries.append(e)
 
     return BookshelfInfo(username=username, entries=entries)

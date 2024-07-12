@@ -12,13 +12,25 @@
                         <tr>
                             <th>文章名称</th>
                             <th>作者</th>
+                            <th>最新章节</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for novel in novels %}
+                        {% for entry in entries %}
                         <tr>
-                            <td><a class="custom-link-chapter" href="/novel/{{ novel.id }}/">{{ novel.title }}</a></td>
+                            <td><a class="custom-link-chapter" href="/novel/{{ entry.novel.id }}/">{{ entry.novel.title
+                                    }}</a></td>
                             <td>{{ author.name }}</td>
+
+                            {%if entry.latest_chapter %}
+                            <td><a class="custom-link-chapter"
+                                    href="/novel/{{ entry.novel.id }}/{{ entry.latest_chapter.id }}.html">{{
+                                    entry.latest_chapter.title
+                                    }}</a></td>
+
+                            {% else %}
+                            <td></td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

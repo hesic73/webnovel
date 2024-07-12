@@ -30,13 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             data.entries.forEach(entry => {
                 const row = document.createElement('tr');
-                const chapterLink = entry.chapter_id && entry.chapter_name
-                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.chapter_id}.html">${entry.chapter_name}</a>`
+                const chapterLink = entry.bookmarked_chapter
+                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.bookmarked_chapter.id}.html">${entry.bookmarked_chapter.title}</a>`
+                    : '';
+
+
+                const latestChapterLink = entry.latest_chapter
+                    ? `<a class="custom-link-chapter" href="/novel/${entry.novel_id}/${entry.latest_chapter.id}.html">${entry.latest_chapter.title}</a>`
                     : '';
 
                 row.innerHTML = `
                 <td><a class="custom-link-chapter" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
                 <td><a class="custom-link-chapter" href="/author/${entry.author.id}/">${entry.author.name}</td>
+                <td>${latestChapterLink}</td>
                 <td>${chapterLink}</td>
                 <td><button class="custom-link-chapter" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
             `;

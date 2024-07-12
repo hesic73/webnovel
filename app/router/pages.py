@@ -1,20 +1,23 @@
 from fastapi import Request, APIRouter, Query
 from fastapi.responses import HTMLResponse
 
+from pydantic import BaseModel
+
 
 from app.database import DBDependency
 from app import database
 
-from app.utils import convert_db_novel_to_model_novel, templates, PageErrorException
+from app.utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter, templates, PageErrorException
 from app.enums import Genre, ScraperSource
 
-from app.schema.chapter import Chapter as ModelChapter
+
+from app.schema.novel import Novel
+from app.schema.chapter import Chapter
 
 router = APIRouter(tags=["Pages"])
 
 
 _DEFAULT_NOVEL_PAGE_SIZE = 20
-_DEFAULT_CHAPTER_PAGE_SIZE = 100
 _LATEST_CHAPTERS_LIMIT = 20
 
 
@@ -52,16 +55,16 @@ async def novel(request: Request, id: int, db: DBDependency):
     novel = convert_db_novel_to_model_novel(db, novel)
 
     first_chapter = database.get_first_chapter(db, novel_id=id)
-    first_chapter = ModelChapter(
-        **first_chapter.__dict__) if first_chapter else None
+    first_chapter = convert_db_chapter_to_model_chapter(
+        first_chapter) if first_chapter else None
 
     last_chapter = database.get_last_chapter(db, novel_id=id)
-    last_chapter = ModelChapter(
-        **last_chapter.__dict__) if last_chapter else None
+    last_chapter = convert_db_chapter_to_model_chapter(
+        last_chapter) if last_chapter else None
 
     latest_chapters = database.get_chapters_reversed(
         db, novel_id=id, limit=_LATEST_CHAPTERS_LIMIT)
-    latest_chapters = [ModelChapter(**chapter.__dict__) if chapter else None
+    latest_chapters = [convert_db_chapter_to_model_chapter(chapter) if chapter else None
                        for chapter in latest_chapters]
 
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
@@ -77,7 +80,8 @@ async def novel(request: Request, id: int, db: DBDependency):
 async def chapters(request: Request, id: int, db: DBDependency):
     chapters = database.get_all_chapters(
         db, novel_id=id)
-    chapters = [ModelChapter(**chapter.__dict__) for chapter in chapters]
+    chapters = [convert_db_chapter_to_model_chapter(
+        chapter) for chapter in chapters]
     # Add a function to get the total count of chapters for a novel
     # total_chapters = database.get_total_chapters_count(db, novel_id=id)
 
@@ -105,17 +109,17 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     if not chapter:
         raise PageErrorException(404, "Chapter not found")
 
-    chapter_model = ModelChapter(**chapter.__dict__)
+    chapter_model = convert_db_chapter_to_model_chapter(chapter)
     novel_model = convert_db_novel_to_model_novel(db, novel)
 
     previous_chapter = database.get_previous_chapter(
         db, novel_id, chapter.chapter_number)
-    previous_chapter_model = ModelChapter(
-        **previous_chapter.__dict__) if previous_chapter else None
+    previous_chapter_model = convert_db_chapter_to_model_chapter(
+        previous_chapter) if previous_chapter else None
     next_chapter = database.get_next_chapter(
         db, novel_id, chapter.chapter_number)
-    next_chapter_model = ModelChapter(
-        **next_chapter.__dict__) if next_chapter else None
+    next_chapter_model = convert_db_chapter_to_model_chapter(
+        next_chapter) if next_chapter else None
 
     return templates.TemplateResponse(
         "chapter.html.jinja",
@@ -154,6 +158,11 @@ async def bookshelf(request: Request):
     })
 
 
+class AuthorNovelEntry(BaseModel):
+    novel: Novel
+    latest_chapter: Chapter | None
+
+
 @router.get("/author/{author_id}/", response_class=HTMLResponse)
 async def author(request: Request, author_id: int, db: DBDependency):
     author = database.get_author_with_novels(db, author_id)
@@ -161,12 +170,16 @@ async def author(request: Request, author_id: int, db: DBDependency):
         raise PageErrorException(404, "Author not found")
 
     novels = author.novels
-    novels = [convert_db_novel_to_model_novel(db, novel) for novel in novels]
+    latest_chapters = [database.get_last_chapter(
+        db, novel_id=novel.id) for novel in novels]
+
+    entries = [AuthorNovelEntry(novel=convert_db_novel_to_model_novel(db, novel), latest_chapter=convert_db_chapter_to_model_chapter(
+        chapter) if chapter else None) for novel, chapter in zip(novels, latest_chapters)]
 
     return templates.TemplateResponse("author.html.jinja", {
         'request': request,
         'author': author,
-        'novels': novels,
+        'entries': entries,
         'title': f"{author.name} - 作品列表",
     })
 
