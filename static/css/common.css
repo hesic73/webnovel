@@ -131,3 +131,35 @@ table td {
 .spacer {
     height: 10vh;
 }
+
+
+
+.reader_mark0 {
+    width: 2rem;
+    height: 2rem;
+    top: 8rem;
+    position: fixed;
+    right: 0.5rem;
+}
+
+.reader_mark0 a {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+    color: #88c6e5 !important;
+}
+
+.reader_mark1 {
+    width: 2rem;
+    height: 2rem;
+    top: 10.5rem;
+    position: fixed;
+    right: 0.5rem;
+}
+
+.reader_mark1 a {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+    color: #88c6e5 !important;
+}

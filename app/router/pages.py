@@ -14,7 +14,7 @@ from app.enums import Genre, ScraperSource
 from app.schema.novel import Novel
 from app.schema.chapter import Chapter
 
-router = APIRouter(tags=["Pages"])
+router = APIRouter(tags=["Pages"], include_in_schema=False)
 
 
 _DEFAULT_NOVEL_PAGE_SIZE = 20
