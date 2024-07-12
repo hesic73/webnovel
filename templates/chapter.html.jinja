@@ -5,7 +5,7 @@
     <div class="container">
 
         <div class="columns is-mobile is-centered">
-            <div class="column is-8-fullhd is-9-widescreen is-10-desktop">
+            <div class="column is-10-fullhd is-11-widescreen">
                 <div class="custom-border-chapter">
 
                     <div class="breadcrumb has-succeeds-separator mb-2" aria-label="breadcrumbs">
@@ -75,6 +75,14 @@
 </div>
 
 <div class="reader_mark1">
+    <a onclick="addBookmark({{ novel.id }}, {{ chapter.id }})">
+        <span class="icon is-medium">
+            <i class="fa-solid fa-2x fa-bookmark"></i>
+        </span>
+    </a>
+</div>
+
+<div class="reader_mark2">
     <a onclick="scrollToBottom()">
         <span class="icon is-medium">
             <i class="fa-solid fa-2x fa-arrow-down"></i>

@@ -163,3 +163,18 @@ table td {
     display: block;
     color: #88c6e5 !important;
 }
+
+.reader_mark2 {
+    width: 2rem;
+    height: 2rem;
+    top: 13rem;
+    position: fixed;
+    right: 0.5rem;
+}
+
+.reader_mark2 a {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+    color: #88c6e5 !important;
+}
