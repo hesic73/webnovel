@@ -22,15 +22,23 @@
 
 <!-- Pagination controls -->
 <nav class="pagination mt-2 is-rounded" role="navigation" aria-label="pagination">
-    {% if page <= 1 %} <a class="pagination-previous" disabled> 上一页 </a>
+    {% if page <= 1 %} <a class="pagination-previous" disabled><span class="icon">
+            <i class="fa-solid fa-angle-left"></i>
+        </span></a>
         {% else %}
-        <a class="pagination-previous" href="/?page={{ page - 1 }}&page_size={{ page_size }}"> 上一页 </a>
+        <a class="pagination-previous" href="/?page={{ page - 1 }}&page_size={{ page_size }}"><span class="icon">
+                <i class="fa-solid fa-angle-left"></i>
+            </span></a>
         {% endif %}
 
         {% if page >= total_pages %}
-        <a class="pagination-next" disabled> 下一页 </a>
+        <a class="pagination-next" disabled><span class="icon">
+                <i class="fa-solid fa-angle-right"></i>
+            </span></a>
         {% else %}
-        <a class="pagination-next" href="/?page={{ page + 1 }}&page_size={{ page_size }}"> 下一页 </a>
+        <a class="pagination-next" href="/?page={{ page + 1 }}&page_size={{ page_size }}"><span class="icon">
+                <i class="fa-solid fa-angle-right"></i>
+            </span></a>
         {% endif %}
 
         <ul class="pagination-list">
