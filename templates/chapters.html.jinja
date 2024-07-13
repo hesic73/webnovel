@@ -12,7 +12,8 @@
     <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
         <div class="grid is-size-6" id="chapters-container">
             {% for chapter in chapters %}
-            <dd class="cell"><a class="custom-link-list" href="/novel/{{ novel.id }}/{{chapter.id}}.html">{{
+            <dd class="cell"><a class="custom-link-list" href="/novel/{{ novel.id }}/{{chapter.id}}.html"
+                    id="{{chapter.id}}">{{
                     chapter.title }}</a></dd>
             {% endfor %}
         </div>

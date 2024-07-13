@@ -4,6 +4,15 @@ async function registerUser() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
+    const notification = document.getElementById('notification');
+
+    if (username === '' || email === '') {
+        notification.classList.remove('is-hidden', 'is-success');
+        notification.classList.add('is-danger');
+        notification.textContent = '用户名和邮箱不能为空';
+        return;
+    }
+
     const response = await fetch('/auth/register', {
         method: 'POST',
         headers: {
@@ -15,8 +24,6 @@ async function registerUser() {
             password: password
         }),
     });
-
-    const notification = document.getElementById('notification');
 
     if (response.ok) {
         notification.classList.remove('is-hidden', 'is-danger');
