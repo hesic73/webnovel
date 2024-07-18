@@ -8,7 +8,7 @@ from app.database import DBDependency
 from app import database
 from app.securities import create_access_token, pwd_context
 
-from app.schema.user import User as ModelUser
+from app import models
 
 
 from email_validator import validate_email, EmailNotValidError
@@ -56,7 +56,7 @@ class RegisterRequest(BaseModel):
     password: str
 
 
-@router.post("/register", response_model=ModelUser)
+@router.post("/register", response_model=models.User)
 async def register_user(form_data: RegisterRequest, db: DBDependency):
     try:
         valid = validate_email(form_data.email)

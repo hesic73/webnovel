@@ -2,10 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from pydantic import BaseModel
 
-from app.schema.reading_entry import ReadingEntryDisplay, ReadingEntryDelete, ReadingEntryUpdate
-from app.schema.novel import Novel
-from app.schema.chapter import Chapter
-from app.schema.author import Author
+from app import models
 from app.database import DBDependency
 from app import database
 
@@ -20,7 +17,7 @@ router = APIRouter()
 
 class BookshelfInfo(BaseModel):
     username: str
-    entries: list[ReadingEntryDisplay]
+    entries: list[models.ReadingEntry]
 
 
 @router.get("/bookshelf/", response_model=BookshelfInfo)
@@ -41,26 +38,38 @@ async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
     entries = []
     for entry in reading_entries:
         if entry.current_chapter:
-            bookmarked_chapter = Chapter(
+            bookmarked_chapter = models.Chapter(
                 id=entry.current_chapter.id, novel_id=entry.novel_id, title=entry.current_chapter.title)
         else:
             bookmarked_chapter = None
 
         if _latest_chapter := database.get_last_chapter(
                 db=db, novel_id=entry.novel_id):
-            latest_chapter = Chapter(
+            latest_chapter = models.Chapter(
                 id=_latest_chapter.id, novel_id=entry.novel_id, title=_latest_chapter.title)
         else:
             latest_chapter = None
 
-        e = ReadingEntryDisplay(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
-                                author=Author(
+        e = models.ReadingEntry(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
+                                author=models.Author(
                                     id=entry.novel.author.id, name=entry.novel.author.name),
                                 bookmarked_chapter=bookmarked_chapter, latest_chapter=latest_chapter)
 
         entries.append(e)
 
     return BookshelfInfo(username=username, entries=entries)
+
+
+class ReadingEntryDelete(BaseModel):
+    user_id: int
+    novel_id: int
+    current_chapter_id: int | None = None
+
+
+class ReadingEntryUpdate(BaseModel):
+    user_id: int
+    novel_id: int
+    current_chapter_id: int | None = None
 
 
 @router.delete("/bookshelf/{novel_id}/", response_model=ReadingEntryDelete)
@@ -135,7 +144,7 @@ class NovelUpdate(BaseModel):
     description: str | None = None
 
 
-@router.put("/novel/{novel_id}/", response_model=Novel)
+@router.put("/novel/{novel_id}/", response_model=models.Novel)
 async def update_novel(novel: NovelUpdate, db: DBDependency):
     db_novel = database.update_novel(db=db, novel_id=novel.id, title=novel.title,
                                      author_name=novel.author_name, genre=novel.genre, description=novel.description)

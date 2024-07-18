@@ -1,27 +1,45 @@
 from fastapi import Request, APIRouter, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 
+from fastapi import status
+
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 
 from app.database import DBDependency
 from app import database
 
-from app.utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter, templates, PageErrorException
+from app.utils.model_utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter
 from app.enums import Genre, ScraperSource
 
 
-from app.schema.novel import Novel
-from app.schema.chapter import Chapter
+from app import models
 
 from app.consts import DEFAULT_NOVEL_PAGE_SIZE, LATEST_CHAPTERS_LIMIT
 
-router = APIRouter(tags=["Pages"], include_in_schema=False)
+
+templates = Jinja2Templates(directory="templates")
+
+
+def nl2br(value: str) -> str:
+    return value.replace('\n', '<br>\n')
+
+
+templates.env.filters['nl2br'] = nl2br
+
+router = APIRouter(tags=["Pages"], include_in_schema=False,
+                   default_response_class=HTMLResponse)
 
 
 @router.get("/", response_class=HTMLResponse)
-async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
-                page_size: int = Query(DEFAULT_NOVEL_PAGE_SIZE, ge=1, le=100)):
+async def index():
+    return RedirectResponse("/novels/")
+
+
+@router.get("/novels/")
+async def novels(request: Request, db: DBDependency, page: int = Query(1, ge=1),
+                 page_size: int = Query(DEFAULT_NOVEL_PAGE_SIZE, ge=1, le=100)):
     skip = (page - 1) * page_size
 
     novels = database.get_novels(db, skip=skip, limit=page_size)
@@ -33,7 +51,7 @@ async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
 
     return templates.TemplateResponse(
         request=request,
-        name="index.html.jinja",
+        name="novels.html.jinja",
         context={
             'novels': novels,
             'page': page,
@@ -43,12 +61,19 @@ async def index(request: Request, db: DBDependency, page: int = Query(1, ge=1),
     )
 
 
-@router.get("/novel/{id}/", response_class=HTMLResponse)
+@router.get("/novel/{id}/")
 async def novel(request: Request, id: int, db: DBDependency):
     novel = database.get_novel(db, novel_id=id)
 
     if not novel:
-        raise PageErrorException(404, "Novel not found")
+        return templates.TemplateResponse(
+            "error.html.jinja",
+            {
+                "request": request,
+                "title": "Novel not found",
+            },
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
     novel = convert_db_novel_to_model_novel(db, novel)
 
@@ -74,7 +99,7 @@ async def novel(request: Request, id: int, db: DBDependency):
     })
 
 
-@router.get("/novel/{id}/chapters/", response_class=HTMLResponse)
+@router.get("/novel/{id}/chapters/")
 async def chapters(request: Request, id: int, db: DBDependency):
     chapters = database.get_all_chapters(
         db, novel_id=id)
@@ -97,15 +122,29 @@ async def chapters(request: Request, id: int, db: DBDependency):
     )
 
 
-@router.get("/novel/{novel_id}/{chapter_id}.html", response_class=HTMLResponse)
+@router.get("/novel/{novel_id}/{chapter_id}.html")
 async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDependency):
     novel = database.get_novel_with_chapters(db, novel_id=novel_id)
     if not novel:
-        raise PageErrorException(404, "Novel not found")
+        return templates.TemplateResponse(
+            "error.html.jinja",
+            {
+                "request": request,
+                "title": "Novel not found",
+            },
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
     chapter = next((ch for ch in novel.chapters if ch.id == chapter_id), None)
     if not chapter:
-        raise PageErrorException(404, "Chapter not found")
+        return templates.TemplateResponse(
+            "error.html.jinja",
+            {
+                "request": request,
+                "title": "Chapter not found",
+            },
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
     chapter_model = convert_db_chapter_to_model_chapter(chapter)
     novel_model = convert_db_novel_to_model_novel(db, novel)
@@ -132,7 +171,7 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     )
 
 
-@router.get("/register_form.html", response_class=HTMLResponse)
+@router.get("/register_form.html")
 async def register_form(request: Request):
     return templates.TemplateResponse("auth/register_form.html.jinja", {
         "request": request,
@@ -140,7 +179,7 @@ async def register_form(request: Request):
     })
 
 
-@router.get("/login_form.html", response_class=HTMLResponse)
+@router.get("/login_form.html")
 async def login_form(request: Request):
     return templates.TemplateResponse("auth/login_form.html.jinja", {
         "request": request,
@@ -148,7 +187,7 @@ async def login_form(request: Request):
     })
 
 
-@router.get("/bookshelf/", response_class=HTMLResponse)
+@router.get("/bookshelf/")
 async def bookshelf(request: Request):
     return templates.TemplateResponse("bookshelf.html.jinja", {
         "request": request,
@@ -157,15 +196,22 @@ async def bookshelf(request: Request):
 
 
 class AuthorNovelEntry(BaseModel):
-    novel: Novel
-    latest_chapter: Chapter | None
+    novel: models.Novel
+    latest_chapter: models.Chapter | None
 
 
-@router.get("/author/{author_id}/", response_class=HTMLResponse)
+@router.get("/author/{author_id}/")
 async def author(request: Request, author_id: int, db: DBDependency):
     author = database.get_author_with_novels(db, author_id)
     if not author:
-        raise PageErrorException(404, "Author not found")
+        return templates.TemplateResponse(
+            "error.html.jinja",
+            {
+                "request": request,
+                "title": "Author not found",
+            },
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
 
     novels = author.novels
     latest_chapters = [database.get_last_chapter(
@@ -182,7 +228,7 @@ async def author(request: Request, author_id: int, db: DBDependency):
     })
 
 
-@router.get("/scrape_form.html", response_class=HTMLResponse)
+@router.get("/scrape_form.html")
 async def scrape_form(request: Request):
     return templates.TemplateResponse("scrape_form.html.jinja", {
         "request": request,

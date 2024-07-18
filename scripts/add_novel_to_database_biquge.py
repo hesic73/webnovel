@@ -8,7 +8,7 @@ from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QComboBox, QPushButton, QProgressBar, QMessageBox
 
 
-from app.utils import make_scraper_function
+from app.utils.scraper_utils import make_scraper_function
 
 
 class Worker(QThread):

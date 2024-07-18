@@ -11,7 +11,12 @@ from app import database
 
 from app.enums import Genre, ScraperSource, UserType
 
-from app.utils import make_scraper_function, submit_task
+from app.utils.scraper_utils import make_scraper_function
+from app.utils.process_utils import submit_task
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class ScrapeNovel(BaseModel):
@@ -20,7 +25,7 @@ class ScrapeNovel(BaseModel):
     genre: Genre
 
 
-router = APIRouter(tags=["Admin API"])
+router = APIRouter(tags=["Internal"])
 
 
 def add_novel_to_database_wrapper(scrape_novel: ScrapeNovel):
@@ -46,15 +51,15 @@ async def scraper(scrape_novel: ScrapeNovel, db: DBDependency, payload: TokenPay
     if user.user_type != UserType.ADMIN:
         raise HTTPException(status_code=403, detail="Permission denied")
 
-    logging.info(f"Received request to scrape: {scrape_novel.url}")
+    logger.info(f"Received request to scrape: {scrape_novel.url}")
     future = submit_task(add_novel_to_database_wrapper, scrape_novel)
 
     def log_result(f: Future[None]):
         try:
             result = f.result()
-            logging.info(f"Scraping completed: {result}")
+            logger.info(f"Scraping completed: {result}")
         except Exception as e:
-            logging.error(f"Error during scraping: {e}")
+            logger.error(f"Error during scraping: {e}")
 
     future.add_done_callback(log_result)
     return {"message": "Scraping started"}
