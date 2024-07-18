@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr
 
 from app.database import DBDependency
 from app import database
-from app.securities import create_access_token, pwd_context
+from app.utils.auth_utils import create_access_token, pwd_context
 
 from app import models
 

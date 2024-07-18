@@ -30,24 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             data.entries.forEach(entry => {
                 const row = document.createElement('tr');
-                const chapterLink = entry.bookmarked_chapter
-                    ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.bookmarked_chapter.id}.html">${entry.bookmarked_chapter.title}</a>`
-                    : '';
-
-
-                const latestChapterLink = entry.latest_chapter
-                    ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.latest_chapter.id}.html">${entry.latest_chapter.title}</a>`
-                    : '';
-
-                row.innerHTML = `
-                <td><a class="custom-link-normal" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
-                <td><a class="custom-link-normal" href="/author/${entry.author.id}/">${entry.author.name}</td>
-                <td>${latestChapterLink}</td>
-                <td>${chapterLink}</td>
-                <td><button class="custom-link-normal" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
-            `;
+                row.innerHTML = bookshelfItem(entry);
                 table.appendChild(row);
             });
+
+
+            if (data.user_type === 'admin') {
+                const panel = document.getElementById('admin-panel');
+                panel.innerHTML = `<a class="custom-link-normal" href="/admin-panel.html">管理后台</a>`;
+            }
+
         })
         .catch(error => {
             console.error('Error fetching bookshelf data:', error);
@@ -79,4 +71,25 @@ function removeFromBookshelf(novel_id) {
         .catch(error => {
             console.error('Error removing book from bookshelf:', error);
         });
+}
+
+
+function bookshelfItem(entry) {
+    const chapterLink = entry.bookmarked_chapter
+        ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.bookmarked_chapter.id}.html">${entry.bookmarked_chapter.title}</a>`
+        : '';
+
+
+    const latestChapterLink = entry.latest_chapter
+        ? `<a class="custom-link-normal" href="/novel/${entry.novel_id}/${entry.latest_chapter.id}.html">${entry.latest_chapter.title}</a>`
+        : '';
+
+
+    return `
+    <td><a class="custom-link-normal" href="/novel/${entry.novel_id}/">${entry.title}</a></td>
+    <td><a class="custom-link-normal" href="/author/${entry.author.id}/">${entry.author.name}</td>
+    <td>${latestChapterLink}</td>
+    <td>${chapterLink}</td>
+    <td><button class="custom-link-normal" onclick="removeFromBookshelf(${entry.novel_id})"><i class="fa-solid fa-trash-can"></i></button></td>
+`;
 }

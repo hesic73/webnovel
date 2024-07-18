@@ -6,7 +6,7 @@ import logging
 from pydantic import BaseModel
 
 from app.database import DBDependency, get_db_sync
-from app.securities import TokenPayloadDependency
+from app.utils.auth_utils import RequireAdminDependency
 from app import database
 
 from app.enums import Genre, ScraperSource, UserType
@@ -39,17 +39,7 @@ def add_novel_to_database_wrapper(scrape_novel: ScrapeNovel):
 
 
 @router.post("/scrape/")
-async def scraper(scrape_novel: ScrapeNovel, db: DBDependency, payload: TokenPayloadDependency):
-
-    username = payload.sub
-
-    user = database.get_user_by_username(db=db, username=username)
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if user.user_type != UserType.ADMIN:
-        raise HTTPException(status_code=403, detail="Permission denied")
+async def scraper(scrape_novel: ScrapeNovel, user: RequireAdminDependency):
 
     logger.info(f"Received request to scrape: {scrape_novel.url}")
     future = submit_task(add_novel_to_database_wrapper, scrape_novel)

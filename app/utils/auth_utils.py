@@ -2,12 +2,14 @@ import os
 
 from passlib.context import CryptContext
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from authx import AuthX, AuthXConfig, RequestToken, TokenPayload
 
 from typing import Annotated
 
-from datetime import timedelta
+from app import database
+from app.database import DBDependency
+from app.enums import UserType
 
 config = AuthXConfig(
     JWT_ALGORITHM="HS256",
@@ -46,3 +48,31 @@ RequestTokenDependency = Annotated[RequestToken, Depends(
 
 TokenPayloadDependency = Annotated[TokenPayload,
                                    Depends(auth.access_token_required)]
+
+
+async def require_admin(payload: TokenPayloadDependency, db: DBDependency):
+    username = payload.sub
+    user = database.get_user_by_username(db=db, username=username)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.user_type != UserType.ADMIN:
+        raise HTTPException(status_code=403, detail="Permission denied")
+
+    return user
+
+
+RequireAdminDependency = Annotated[database.User, Depends(require_admin)]
+
+
+async def require_user(payload: TokenPayloadDependency, db: DBDependency):
+    username = payload.sub
+    user = database.get_user_by_username(db=db, username=username)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
+RequireUserDependency = Annotated[database.User, Depends(require_user)]

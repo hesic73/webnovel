@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi import status
 
 from pydantic import BaseModel
 
@@ -6,9 +7,9 @@ from app import models
 from app.database import DBDependency
 from app import database
 
-from app.securities import TokenPayloadDependency
+from app.utils.auth_utils import RequireUserDependency
 
-from app.enums import Genre
+from app.enums import Genre, UserType
 
 from app.consts import BOOKSHELF_SIZE
 
@@ -17,19 +18,15 @@ router = APIRouter()
 
 class BookshelfInfo(BaseModel):
     username: str
+    user_type: UserType
     entries: list[models.ReadingEntry]
 
 
 @router.get("/bookshelf/", response_model=BookshelfInfo)
-async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
-    username = payload.sub
-
-    user = database.get_user_by_username(db=db, username=username)
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
 
     user_id = user.id
+    username = user.username
 
     # Query the reading entries
     reading_entries = database.get_user_reading_entries(db=db, user_id=user_id)
@@ -57,7 +54,7 @@ async def get_bookshelf(db: DBDependency, payload: TokenPayloadDependency):
 
         entries.append(e)
 
-    return BookshelfInfo(username=username, entries=entries)
+    return BookshelfInfo(username=username, user_type=user.user_type, entries=entries)
 
 
 class ReadingEntryDelete(BaseModel):
@@ -73,17 +70,15 @@ class ReadingEntryUpdate(BaseModel):
 
 
 @router.delete("/bookshelf/{novel_id}/", response_model=ReadingEntryDelete)
-async def remove_novel_from_bookshelf(db: DBDependency, payload: TokenPayloadDependency, novel_id: int):
-    username = payload.sub
-
-    user = database.get_user_by_username(db=db, username=username)
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def remove_novel_from_bookshelf(db: DBDependency, user: RequireUserDependency, novel_id: int):
 
     # Remove the novel from the reading entries
     entry = database.remove_novel_from_reading_entry(
         db=db, user_id=user.id, novel_id=novel_id)
+
+    if not entry:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Reading entry not found")
 
     return entry
 
@@ -94,13 +89,7 @@ class BookmarkRequest(BaseModel):
 
 
 @router.post("/bookmark/", response_model=ReadingEntryUpdate)
-async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, payload: TokenPayloadDependency):
-    username = payload.sub
-
-    user = database.get_user_by_username(db=db, username=username)
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, user: RequireUserDependency):
 
     user_id = user.id
 

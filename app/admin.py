@@ -10,7 +10,7 @@ from sqladmin.authentication import AuthenticationBackend
 
 
 from app import database
-from app.securities import create_access_token, verify_token, pwd_context
+from app.utils.auth_utils import create_access_token, verify_token, pwd_context
 from app.enums import UserType
 
 

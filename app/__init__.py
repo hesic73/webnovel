@@ -7,7 +7,7 @@ from app.routers import api, internal, pages, auth
 from app.utils.process_utils import executor_lifespan
 
 from app.admin import initialize_admin
-from app.securities import initialize_auth
+from app.utils.auth_utils import initialize_auth
 
 
 from authx.exceptions import MissingTokenError, JWTDecodeError

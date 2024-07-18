@@ -228,9 +228,17 @@ async def author(request: Request, author_id: int, db: DBDependency):
     })
 
 
-@router.get("/scrape_form.html")
+@router.get("/admin-panel.html")
+async def admin_panel(request: Request):
+    return templates.TemplateResponse("admin/panel.html.jinja", {
+        "request": request,
+        'title': '管理面板',
+    })
+
+
+@router.get("/scrape-form.html")
 async def scrape_form(request: Request):
-    return templates.TemplateResponse("scrape_form.html.jinja", {
+    return templates.TemplateResponse("admin/scrape_form.html.jinja", {
         "request": request,
         "title": "爬取小说",
         "genres": Genre,
