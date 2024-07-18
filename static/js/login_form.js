@@ -23,6 +23,6 @@ async function loginUser() {
         const result = await response.json();
         notification.classList.remove('is-hidden', 'is-success');
         notification.classList.add('is-danger');
-        notification.textContent = '登录失败: ' + result.detail;
+        notification.textContent = '登录失败: ' + result.detail.message;
     }
 }

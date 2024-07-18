@@ -34,6 +34,6 @@ async function registerUser() {
         const result = await response.json();
         notification.classList.remove('is-hidden', 'is-success');
         notification.classList.add('is-danger');
-        notification.textContent = '注册失败: ' + result.detail;
+        notification.textContent = '注册失败: ' + result.detail.message;
     }
 }

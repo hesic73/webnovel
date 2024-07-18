@@ -26,7 +26,7 @@
             <i class="fa-solid fa-angle-left"></i>
         </span></a>
         {% else %}
-        <a class="pagination-previous" href="/novels/?page={{ page - 1 }}&page_size={{ page_size }}"><span class="icon">
+        <a class="pagination-previous" href="/novels/?page={{ page - 1 }}"><span class="icon">
                 <i class="fa-solid fa-angle-left"></i>
             </span></a>
         {% endif %}
@@ -36,7 +36,7 @@
                 <i class="fa-solid fa-angle-right"></i>
             </span></a>
         {% else %}
-        <a class="pagination-next" href="/novels/?page={{ page + 1 }}&page_size={{ page_size }}"><span class="icon">
+        <a class="pagination-next" href="/novels/?page={{ page + 1 }}"><span class="icon">
                 <i class="fa-solid fa-angle-right"></i>
             </span></a>
         {% endif %}
@@ -44,13 +44,13 @@
         <ul class="pagination-list">
             {% if total_pages <= 7 %} {% for p in range(1, total_pages + 1) %} <li>
                 <a class="pagination-link {% if p == page %}is-current{% endif %}"
-                    href="/novels/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+                    href="/novels/?page={{ p }}">{{ p }}</a>
                 </li>
                 {% endfor %}
                 {% else %}
                 <li>
                     <a class="pagination-link {% if page == 1 %}is-current{% endif %}"
-                        href="/novels/?page=1&page_size={{ page_size }}">1</a>
+                        href="/novels/?page=1">1</a>
                 </li>
                 {% if page > 4 %}
                 <li><span class="pagination-ellipsis">&hellip;</span></li>
@@ -58,14 +58,14 @@
                 {% for p in range([2, page - 2]|max, [total_pages, page + 2]|min + 1) %}
                 <li>
                     <a class="pagination-link {% if p == page %}is-current{% endif %}"
-                        href="/novels/?page={{ p }}&page_size={{ page_size }}">{{ p }}</a>
+                        href="/novels/?page={{ p }}">{{ p }}</a>
                 </li>
                 {% endfor %}
                 {% if page < total_pages - 3 %} <li><span class="pagination-ellipsis">&hellip;</span></li>
                     {% endif %}
                     {% if page + 2 < total_pages %} <li>
                         <a class="pagination-link {% if page == total_pages %}is-current{% endif %}"
-                            href="/novels/?page={{ total_pages }}&page_size={{ page_size }}">{{ total_pages }}</a>
+                            href="/novels/?page={{ total_pages }}">{{ total_pages }}</a>
                         </li>
                         {% endif %}
                         {% endif %}

@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (token) {
         navbarButtons.innerHTML = `
             <a class="button is-light" href="/bookshelf/">
-                书架
+                <strong>书架</strong>
             </a>
             <a class="button is-light" href="#" id="logout-button">
-                登出
+                <strong>登出</strong>
             </a>
         `;
 

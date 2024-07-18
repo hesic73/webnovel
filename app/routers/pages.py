@@ -38,8 +38,8 @@ async def index():
 
 
 @router.get("/novels/")
-async def novels(request: Request, db: DBDependency, page: int = Query(1, ge=1),
-                 page_size: int = Query(DEFAULT_NOVEL_PAGE_SIZE, ge=1, le=100)):
+async def novels(request: Request, db: DBDependency, page: int = Query(1, ge=1)):
+    page_size = DEFAULT_NOVEL_PAGE_SIZE
     skip = (page - 1) * page_size
 
     novels = database.get_novels(db, skip=skip, limit=page_size)
