@@ -13,8 +13,25 @@ document.addEventListener('keydown', function (event) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-        return;
+    const savedFontSize = localStorage.getItem('fontSize');
+    if (savedFontSize) {
+        const chapterContent = document.getElementById('chapter-content');
+        chapterContent.classList.remove('is-size-1', 'is-size-2', 'is-size-3', 'is-size-4', 'is-size-5', 'is-size-6');
+        chapterContent.classList.add(savedFontSize);
+        document.getElementById('fonttype').value = savedFontSize;
     }
 });
+
+
+function changeContentFontSize(selectElement) {
+    var selectedClass = selectElement.value;
+    var chapterContent = document.getElementById('chapter-content');
+
+    // Remove existing size classes
+    chapterContent.classList.remove('is-size-1', 'is-size-2', 'is-size-3', 'is-size-4', 'is-size-5', 'is-size-6');
+
+    // Add the selected size class
+    chapterContent.classList.add(selectedClass);
+
+    localStorage.setItem('fontSize', selectedClass);
+}

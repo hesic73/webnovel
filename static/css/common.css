@@ -233,3 +233,12 @@ table td {
     justify-content: flex-end;
     align-items: center;
 }
+
+
+.chapter-top-bar {
+    background: #e1eced;
+    border-bottom: solid 1px #d3d3d3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
