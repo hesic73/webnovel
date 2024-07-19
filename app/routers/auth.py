@@ -32,24 +32,24 @@ def login(form_data: LoginRequest, db: DBDependency):
 
     if not username and not email:
         raise HTTPException(
-            401, detail={"message":  "Username or email must be provided"})
+            401, detail="Username or email must be provided")
 
     if email:
         user = database.get_user_by_email(db, email)
         if not user:
-            raise HTTPException(401, detail={"message": "Email not found"})
+            raise HTTPException(401, detail="Email not found")
         username = user.username
     else:
         user = database.get_user_by_username(db, username)
         if not user:
-            raise HTTPException(401, detail={"message": "Username not found"})
+            raise HTTPException(401, detail="Username not found")
         email = user.email
 
     if pwd_context.verify(password, user.hashed_password):
         token = create_access_token(uid=username)
         return {"access_token": token}
 
-    raise HTTPException(401, detail={"message": "Incorrect password"})
+    raise HTTPException(401, detail="Incorrect password")
 
 
 class RegisterRequest(BaseModel):
@@ -66,7 +66,7 @@ async def register_user(form_data: RegisterRequest, db: DBDependency):
     except EmailNotValidError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"message": f"Invalid email: {str(e)}"}
+            detail=f"Invalid email: {str(e)}"
         )
     hashed_password = pwd_context.hash(form_data.password)
 
@@ -76,7 +76,7 @@ async def register_user(form_data: RegisterRequest, db: DBDependency):
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"message": "Username or email already registered"}
+            detail="Username or email already registered"
         )
 
     return user
