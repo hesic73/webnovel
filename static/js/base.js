@@ -1,16 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Check if the token exists in localStorage
     const token = localStorage.getItem('access_token');
-    const navbarButtons = document.getElementById('navbar-buttons');
+    const navbarButtons = document.getElementById('user-panel');
 
     if (token) {
         navbarButtons.innerHTML = `
-            <a class="button is-light" href="/bookshelf/">
-                <strong>书架</strong>
-            </a>
-            <a class="button is-light" href="#" id="logout-button">
-                <strong>登出</strong>
-            </a>
+        <a href="/bookshelf/" class="custom-link-normal">书架</a>
+        <a id="logout-button" href="#" class="custom-link-normal">登出</a>
         `;
 
         // Add logout functionality
