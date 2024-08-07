@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app.enums import Genre, ScraperSource
-from app.database import get_db_sync
+from app.database.session import get_db_sync
 import sys
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal

@@ -37,3 +37,8 @@ class ReadingEntry(BaseModel):
     author: Author
     bookmarked_chapter: Chapter | None
     latest_chapter: Chapter | None
+
+
+class AuthorNovelEntry(BaseModel):
+    novel: Novel
+    latest_chapter: Chapter | None

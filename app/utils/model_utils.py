@@ -2,10 +2,10 @@ from sqlalchemy.orm import Session
 
 
 from app import database
-from app import models
+from app import schemas
 
 
-def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> models.Novel:
+def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> schemas.Novel:
     # Fetch the author's name using the author_id
     db_author: database.Author = db.query(database.Author).filter(
         database.Author.id == db_novel.author_id).first()
@@ -14,11 +14,11 @@ def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> mo
         raise ValueError("Author not found")
 
     # Create the ModelNovel instance
-    model_novel = models.Novel(
+    model_novel = schemas.Novel(
         title=db_novel.title,
         id=db_novel.id,
         author_name=db_author.name,
-        author=models.Author(
+        author=schemas.Author(
             id=db_author.id,
             name=db_author.name
         ),
@@ -29,8 +29,8 @@ def convert_db_novel_to_model_novel(db: Session, db_novel: database.Novel) -> mo
     return model_novel
 
 
-def convert_db_chapter_to_model_chapter(db_chapter: database.Chapter) -> models.Chapter:
-    return models.Chapter(
+def convert_db_chapter_to_model_chapter(db_chapter: database.Chapter) -> schemas.Chapter:
+    return schemas.Chapter(
         id=db_chapter.id,
         novel_id=db_chapter.novel_id,
         title=db_chapter.title,

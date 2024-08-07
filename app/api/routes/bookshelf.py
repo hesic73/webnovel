@@ -3,8 +3,8 @@ from fastapi import status
 
 from pydantic import BaseModel
 
-from app import models
-from app.database import DBDependency
+from app import schemas
+from app.database.session import DBDependency
 from app import database
 
 from app.utils.auth_utils import RequireUserDependency
@@ -19,7 +19,7 @@ router = APIRouter()
 class BookshelfInfo(BaseModel):
     username: str
     user_type: UserType
-    entries: list[models.ReadingEntry]
+    entries: list[schemas.ReadingEntry]
 
 
 @router.get("/bookshelf/", response_model=BookshelfInfo)
@@ -35,20 +35,20 @@ async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
     entries = []
     for entry in reading_entries:
         if entry.current_chapter:
-            bookmarked_chapter = models.Chapter(
+            bookmarked_chapter = schemas.Chapter(
                 id=entry.current_chapter.id, novel_id=entry.novel_id, title=entry.current_chapter.title)
         else:
             bookmarked_chapter = None
 
         if _latest_chapter := database.get_last_chapter(
                 db=db, novel_id=entry.novel_id):
-            latest_chapter = models.Chapter(
+            latest_chapter = schemas.Chapter(
                 id=_latest_chapter.id, novel_id=entry.novel_id, title=_latest_chapter.title)
         else:
             latest_chapter = None
 
-        e = models.ReadingEntry(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
-                                author=models.Author(
+        e = schemas.ReadingEntry(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
+                                author=schemas.Author(
                                     id=entry.novel.author.id, name=entry.novel.author.name),
                                 bookmarked_chapter=bookmarked_chapter, latest_chapter=latest_chapter)
 

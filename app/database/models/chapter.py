@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Text, UniqueConstrai
 from sqlalchemy.orm import relationship, Session
 from sqlalchemy.exc import SQLAlchemyError
 
-from .base import Base
+from ..base import Base
 
 
 class Chapter(Base):

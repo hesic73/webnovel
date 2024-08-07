@@ -8,14 +8,9 @@ from .templates import templates
 from app.utils.model_utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter
 from app.consts import DEFAULT_NOVEL_PAGE_SIZE
 
-from app import models
-from app.database import DBDependency
+from app.schemas import AuthorNovelEntry
+from app.database.session import DBDependency
 from app import database
-
-
-class AuthorNovelEntry(BaseModel):
-    novel: models.Novel
-    latest_chapter: models.Chapter | None
 
 
 router = APIRouter()

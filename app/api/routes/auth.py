@@ -4,11 +4,11 @@ from fastapi import Depends, HTTPException
 from pydantic import BaseModel, EmailStr
 
 
-from app.database import DBDependency
+from app.database.session import DBDependency
 from app import database
 from app.utils.auth_utils import create_access_token, pwd_context
 
-from app import models
+from app import schemas
 
 
 from email_validator import validate_email, EmailNotValidError
@@ -58,7 +58,7 @@ class RegisterRequest(BaseModel):
     password: str
 
 
-@router.post("/register", response_model=models.User)
+@router.post("/register", response_model=schemas.User)
 async def register_user(form_data: RegisterRequest, db: DBDependency):
     try:
         valid = validate_email(form_data.email)

@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi import status
 
 
-from app.database import DBDependency
+from app.database.session import DBDependency
 from app import database
 
 from app.utils.model_utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter

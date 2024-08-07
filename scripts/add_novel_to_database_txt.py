@@ -8,11 +8,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import click
 import re
 from sqlalchemy.orm import Session
-from app.database.novel import create_novel
-from app.database.chapter import create_chapter
+from app.database.models.novel import create_novel
+from app.database.models.chapter import create_chapter
 from app.enums import Genre
 # Ensure you have a function to get a database session
-from app.database import get_db_sync
+from app.database.session import get_db_sync
 
 
 def parse_novel_file(file_path: str):

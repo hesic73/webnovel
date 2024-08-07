@@ -8,7 +8,7 @@ from authx import AuthX, AuthXConfig, RequestToken, TokenPayload
 from typing import Annotated
 
 from app import database
-from app.database import DBDependency
+from app.database.session import DBDependency
 from app.enums import UserType
 
 config = AuthXConfig(

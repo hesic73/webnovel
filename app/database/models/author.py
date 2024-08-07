@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
-from .base import Base
+from ..base import Base
 
 
 class Author(Base):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from .base import Base
+from ..base import Base
 
 from app.enums import UserType
 

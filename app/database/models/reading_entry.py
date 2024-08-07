@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship, Session
-from .base import Base
+from ..base import Base
 
 
 class ReadingEntry(Base):
