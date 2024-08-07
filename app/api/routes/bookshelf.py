@@ -31,17 +31,19 @@ async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
     # Query the reading entries
     reading_entries = crud.get_user_reading_entries(db=db, user_id=user_id)
 
+    last_chapters = crud.get_last_chapters(db=db, novel_ids=[
+        entry.novel_id for entry in reading_entries])
+
     # Prepare the response data
     entries = []
-    for entry in reading_entries:
+    for entry, _latest_chapter in zip(reading_entries, last_chapters):
         if entry.current_chapter:
             bookmarked_chapter = schemas.Chapter(
                 id=entry.current_chapter.id, novel_id=entry.novel_id, title=entry.current_chapter.title)
         else:
             bookmarked_chapter = None
 
-        if _latest_chapter := crud.get_last_chapter(
-                db=db, novel_id=entry.novel_id):
+        if _latest_chapter is not None:
             latest_chapter = schemas.Chapter(
                 id=_latest_chapter.id, novel_id=entry.novel_id, title=_latest_chapter.title)
         else:

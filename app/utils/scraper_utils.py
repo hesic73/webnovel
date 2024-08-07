@@ -30,11 +30,13 @@ def make_scraper_function(source: ScraperSource):
         if post_get_novel_data:
             post_get_novel_data(novel_data)
 
+        author_id = crud.find_or_create_author_id(db, novel_data['author'])
+
         # Create novel entry
         novel = crud.create_novel(
             db=db,
             title=novel_data['title'],
-            author_name=novel_data['author'],
+            author_id=author_id,
             genre=genre,
             description=novel_data['intro']
         )

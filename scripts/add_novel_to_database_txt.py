@@ -84,10 +84,12 @@ def parse_novel_file(file_path: str):
 def add_novel_to_database_txt(db: Session, file_path: str, genre: Genre):
     novel_data = parse_novel_file(file_path)
 
+    author_id = crud.find_or_create_author_id(db, novel_data['author'])
+
     novel = crud.create_novel(
         db=db,
         title=novel_data['title'],
-        author_name=novel_data['author'],
+        author_id=author_id,
         genre=genre,
         description=novel_data['description']
     )
