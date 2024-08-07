@@ -14,7 +14,7 @@ from app import models
 from email_validator import validate_email, EmailNotValidError
 
 
-router = APIRouter(tags=["Auth"])
+router = APIRouter()
 
 
 class LoginRequest(BaseModel):

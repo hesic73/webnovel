@@ -25,7 +25,7 @@ class ScrapeNovel(BaseModel):
     genre: Genre
 
 
-router = APIRouter(tags=["Internal"])
+router = APIRouter()
 
 
 def add_novel_to_database_wrapper(scrape_novel: ScrapeNovel):

@@ -22,8 +22,8 @@ pip install -r requirements.txt
 使用以下命令运行此应用：
 
 ```
-fastapi dev app # 开发模式
-fastapi run app # 生产模式
+fastapi dev app/main.py # 开发模式
+fastapi run app/main.py # 生产模式
 ```
 
 也可以使用[gunicorn](https://gunicorn.org/)作为生产服务器：
@@ -31,7 +31,7 @@ fastapi run app # 生产模式
 
 ```bash
 pip install gunicorn
-gunicorn --bind 0000:8000 -w 4 -k uvicorn.workers.UvicornWorker app:app
+gunicorn --bind 0000:8000 -w 4 -k uvicorn.workers.UvicornWorker app.main:app
 ```
 
 ## 第三方功能组件

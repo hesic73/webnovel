@@ -21,7 +21,7 @@ document.getElementById('scrape-form').addEventListener('submit', async function
     }
 
     try {
-        const response = await fetch('/internal/scrape/', {
+        const response = await fetch('/api/scrape/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

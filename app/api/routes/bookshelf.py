@@ -9,7 +9,7 @@ from app import database
 
 from app.utils.auth_utils import RequireUserDependency
 
-from app.enums import Genre, UserType
+from app.enums import UserType
 
 from app.consts import BOOKSHELF_SIZE
 
@@ -120,23 +120,3 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, user: Requir
     )
 
     return reading_entry
-
-
-# update the novel
-
-
-class NovelUpdate(BaseModel):
-    id: int
-    title: str | None = None
-    author_name: str | None = None
-    genre: Genre | None = None
-    description: str | None = None
-
-
-@router.put("/novel/{novel_id}/", response_model=models.Novel)
-async def update_novel(novel: NovelUpdate, db: DBDependency):
-    db_novel = database.update_novel(db=db, novel_id=novel.id, title=novel.title,
-                                     author_name=novel.author_name, genre=novel.genre, description=novel.description)
-    if not db_novel:
-        raise HTTPException(status_code=404, detail="Novel not found")
-    return db_novel

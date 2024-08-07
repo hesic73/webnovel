@@ -16,11 +16,11 @@ logger = logging.getLogger(__name__)
 def make_scraper_function(source: ScraperSource):
     match source:
         case ScraperSource.BIQUGE1:
-            from app.spiders.biquge1 import get_novel_data, get_chapter_content
+            from app.core.spiders.biquge1 import get_novel_data, get_chapter_content
         case ScraperSource.BIQUGE2:
-            from app.spiders.biquge2 import get_novel_data, get_chapter_content
+            from app.core.spiders.biquge2 import get_novel_data, get_chapter_content
         case ScraperSource.PIAOTIAN:
-            from app.spiders.piaotian import get_novel_data, get_chapter_content
+            from app.core.spiders.piaotian import get_novel_data, get_chapter_content
         case _:
             raise ValueError(f"Invalid source: {source}")
 
