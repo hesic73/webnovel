@@ -5,7 +5,7 @@ from fastapi import status
 
 
 from app.database.session import DBDependency
-from app import database
+from app.database import crud
 
 from app.utils.model_utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter
 
@@ -25,7 +25,7 @@ async def index():
 
 @router.get("/novel/{id}/")
 async def novel(request: Request, id: int, db: DBDependency):
-    novel = database.get_novel(db, novel_id=id)
+    novel = crud.get_novel(db, novel_id=id)
 
     if not novel:
         return templates.TemplateResponse(
@@ -39,15 +39,15 @@ async def novel(request: Request, id: int, db: DBDependency):
 
     novel = convert_db_novel_to_model_novel(db, novel)
 
-    first_chapter = database.get_first_chapter(db, novel_id=id)
+    first_chapter = crud.get_first_chapter(db, novel_id=id)
     first_chapter = convert_db_chapter_to_model_chapter(
         first_chapter) if first_chapter else None
 
-    last_chapter = database.get_last_chapter(db, novel_id=id)
+    last_chapter = crud.get_last_chapter(db, novel_id=id)
     last_chapter = convert_db_chapter_to_model_chapter(
         last_chapter) if last_chapter else None
 
-    latest_chapters = database.get_chapters_reversed(
+    latest_chapters = crud.get_chapters_reversed(
         db, novel_id=id, limit=LATEST_CHAPTERS_LIMIT)
     latest_chapters = [convert_db_chapter_to_model_chapter(chapter) if chapter else None
                        for chapter in latest_chapters]
@@ -63,14 +63,14 @@ async def novel(request: Request, id: int, db: DBDependency):
 
 @router.get("/novel/{id}/chapters/")
 async def chapters(request: Request, id: int, db: DBDependency):
-    chapters = database.get_all_chapters(
+    chapters = crud.get_all_chapters(
         db, novel_id=id)
     chapters = [convert_db_chapter_to_model_chapter(
         chapter) for chapter in chapters]
     # Add a function to get the total count of chapters for a novel
-    # total_chapters = database.get_total_chapters_count(db, novel_id=id)
+    # total_chapters = crud.get_total_chapters_count(db, novel_id=id)
 
-    novel = database.get_novel(db, novel_id=id)
+    novel = crud.get_novel(db, novel_id=id)
     novel = convert_db_novel_to_model_novel(db, novel)
 
     return templates.TemplateResponse(
@@ -86,7 +86,7 @@ async def chapters(request: Request, id: int, db: DBDependency):
 
 @router.get("/novel/{novel_id}/{chapter_id}.html")
 async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDependency):
-    novel = database.get_novel_with_chapters(db, novel_id=novel_id)
+    novel = crud.get_novel_with_chapters(db, novel_id=novel_id)
     if not novel:
         return templates.TemplateResponse(
             "error.html.jinja",
@@ -111,11 +111,11 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
     chapter_model = convert_db_chapter_to_model_chapter(chapter)
     novel_model = convert_db_novel_to_model_novel(db, novel)
 
-    previous_chapter = database.get_previous_chapter(
+    previous_chapter = crud.get_previous_chapter(
         db, novel_id, chapter.chapter_number)
     previous_chapter_model = convert_db_chapter_to_model_chapter(
         previous_chapter) if previous_chapter else None
-    next_chapter = database.get_next_chapter(
+    next_chapter = crud.get_next_chapter(
         db, novel_id, chapter.chapter_number)
     next_chapter_model = convert_db_chapter_to_model_chapter(
         next_chapter) if next_chapter else None

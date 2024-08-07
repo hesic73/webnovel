@@ -1,3 +1,9 @@
+from app.database.session import get_db_sync
+from app.enums import Genre
+from app.database import crud
+from sqlalchemy.orm import Session
+import re
+import click
 import sys
 import os
 
@@ -5,14 +11,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-import click
-import re
-from sqlalchemy.orm import Session
-from app.database.models.novel import create_novel
-from app.database.models.chapter import create_chapter
-from app.enums import Genre
 # Ensure you have a function to get a database session
-from app.database.session import get_db_sync
 
 
 def parse_novel_file(file_path: str):
@@ -85,7 +84,7 @@ def parse_novel_file(file_path: str):
 def add_novel_to_database_txt(db: Session, file_path: str, genre: Genre):
     novel_data = parse_novel_file(file_path)
 
-    novel = create_novel(
+    novel = crud.create_novel(
         db=db,
         title=novel_data['title'],
         author_name=novel_data['author'],
@@ -94,7 +93,7 @@ def add_novel_to_database_txt(db: Session, file_path: str, genre: Genre):
     )
 
     for chapter in novel_data['chapters']:
-        create_chapter(
+        crud.create_chapter(
             db=db,
             novel_id=novel.id,
             chapter_number=chapter['number'],

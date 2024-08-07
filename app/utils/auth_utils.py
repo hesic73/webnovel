@@ -7,7 +7,8 @@ from authx import AuthX, AuthXConfig, RequestToken, TokenPayload
 
 from typing import Annotated
 
-from app import database
+from app.database import User
+from app.database import crud
 from app.database.session import DBDependency
 from app.enums import UserType
 
@@ -52,7 +53,7 @@ TokenPayloadDependency = Annotated[TokenPayload,
 
 async def require_admin(payload: TokenPayloadDependency, db: DBDependency):
     username = payload.sub
-    user = database.get_user_by_username(db=db, username=username)
+    user = crud.get_user_by_username(db=db, username=username)
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -62,12 +63,12 @@ async def require_admin(payload: TokenPayloadDependency, db: DBDependency):
     return user
 
 
-RequireAdminDependency = Annotated[database.User, Depends(require_admin)]
+RequireAdminDependency = Annotated[User, Depends(require_admin)]
 
 
 async def require_user(payload: TokenPayloadDependency, db: DBDependency):
     username = payload.sub
-    user = database.get_user_by_username(db=db, username=username)
+    user = crud.get_user_by_username(db=db, username=username)
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -75,4 +76,4 @@ async def require_user(payload: TokenPayloadDependency, db: DBDependency):
     return user
 
 
-RequireUserDependency = Annotated[database.User, Depends(require_user)]
+RequireUserDependency = Annotated[User, Depends(require_user)]

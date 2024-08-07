@@ -9,38 +9,39 @@ from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
 
 
-from app import database
+from app.database import crud, engine, Author, Novel, Chapter, User, ReadingEntry
+from app.database.session import SessionLocal
 from app.utils.auth_utils import create_access_token, verify_token, pwd_context
 from app.enums import UserType
 
 
-class AuthorView(ModelView, model=database.Author):
-    column_list = [database.Author.id, database.Author.name]
+class AuthorView(ModelView, model=Author):
+    column_list = [Author.id, Author.name]
 
 
-class NovelView(ModelView, model=database.Novel):
-    column_list = [database.Novel.id, database.Novel.title,
-                   database.Novel.genre]
+class NovelView(ModelView, model=Novel):
+    column_list = [Novel.id, Novel.title,
+                   Novel.genre]
 
-    form_excluded_columns = [database.Novel.chapters,
-                             database.Novel.reading_entries]
+    form_excluded_columns = [Novel.chapters,
+                             Novel.reading_entries]
 
-    column_details_exclude_list = [database.Novel.author_id,]
-
-
-class ChapterView(ModelView, model=database.Chapter):
-    column_list = [database.Chapter.id, database.Chapter.title,
-                   database.Chapter.chapter_number, database.Chapter.novel_id]
+    column_details_exclude_list = [Novel.author_id,]
 
 
-class UserView(ModelView, model=database.User):
-    column_list = [database.User.id, database.User.username,
-                   database.User.email, database.User.user_type]
+class ChapterView(ModelView, model=Chapter):
+    column_list = [Chapter.id, Chapter.title,
+                   Chapter.chapter_number, Chapter.novel_id]
 
 
-class ReadingEntryView(ModelView, model=database.ReadingEntry):
-    column_list = [database.ReadingEntry.id, database.ReadingEntry.user_id,
-                   database.ReadingEntry.novel_id, database.ReadingEntry.current_chapter_id]
+class UserView(ModelView, model=User):
+    column_list = [User.id, User.username,
+                   User.email, User.user_type]
+
+
+class ReadingEntryView(ModelView, model=ReadingEntry):
+    column_list = [ReadingEntry.id, ReadingEntry.user_id,
+                   ReadingEntry.novel_id, ReadingEntry.current_chapter_id]
 
 
 class AdminAuth(AuthenticationBackend):
@@ -49,8 +50,8 @@ class AdminAuth(AuthenticationBackend):
         username, password = form["username"], form["password"]
 
         # Get the database
-        with database.SessionLocal() as db:
-            user = database.get_user_by_username(db, username)
+        with SessionLocal() as db:
+            user = crud.get_user_by_username(db, username)
 
         if not user:
             return False
@@ -87,7 +88,7 @@ def initialize_admin(app: FastAPI):
     authentication_backend = AdminAuth(
         secret_key=os.environ.get('SECRET_KEY', 'secret'))
 
-    admin = Admin(app=app, engine=database.engine,
+    admin = Admin(app=app, engine=engine,
                   authentication_backend=authentication_backend)
     admin.add_view(AuthorView)
     admin.add_view(NovelView)

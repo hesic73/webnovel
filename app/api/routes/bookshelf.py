@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from app import schemas
 from app.database.session import DBDependency
-from app import database
+from app.database import crud
 
 from app.utils.auth_utils import RequireUserDependency
 
@@ -29,7 +29,7 @@ async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
     username = user.username
 
     # Query the reading entries
-    reading_entries = database.get_user_reading_entries(db=db, user_id=user_id)
+    reading_entries = crud.get_user_reading_entries(db=db, user_id=user_id)
 
     # Prepare the response data
     entries = []
@@ -40,7 +40,7 @@ async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
         else:
             bookmarked_chapter = None
 
-        if _latest_chapter := database.get_last_chapter(
+        if _latest_chapter := crud.get_last_chapter(
                 db=db, novel_id=entry.novel_id):
             latest_chapter = schemas.Chapter(
                 id=_latest_chapter.id, novel_id=entry.novel_id, title=_latest_chapter.title)
@@ -48,9 +48,9 @@ async def get_bookshelf(db: DBDependency, user: RequireUserDependency):
             latest_chapter = None
 
         e = schemas.ReadingEntry(id=entry.id, novel_id=entry.novel_id, title=entry.novel.title,
-                                author=schemas.Author(
-                                    id=entry.novel.author.id, name=entry.novel.author.name),
-                                bookmarked_chapter=bookmarked_chapter, latest_chapter=latest_chapter)
+                                 author=schemas.Author(
+                                     id=entry.novel.author.id, name=entry.novel.author.name),
+                                 bookmarked_chapter=bookmarked_chapter, latest_chapter=latest_chapter)
 
         entries.append(e)
 
@@ -73,7 +73,7 @@ class ReadingEntryUpdate(BaseModel):
 async def remove_novel_from_bookshelf(db: DBDependency, user: RequireUserDependency, novel_id: int):
 
     # Remove the novel from the reading entries
-    entry = database.remove_novel_from_reading_entry(
+    entry = crud.remove_novel_from_reading_entry(
         db=db, user_id=user.id, novel_id=novel_id)
 
     if not entry:
@@ -94,7 +94,7 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, user: Requir
     user_id = user.id
 
     # Check if the reading entry exists
-    reading_entry = database.get_reading_entry(
+    reading_entry = crud.get_reading_entry(
         db, user_id=user_id, novel_id=bookmark.novel_id)
 
     if reading_entry:
@@ -106,13 +106,13 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, user: Requir
 
         return reading_entry
 
-    count = database.count_user_reading_entries(db=db, user_id=user_id)
+    count = crud.count_user_reading_entries(db=db, user_id=user_id)
 
     if count >= BOOKSHELF_SIZE:
         raise HTTPException(
             status_code=400, detail=f"User has reached the maximum bookshelf size of {BOOKSHELF_SIZE}")
 
-    reading_entry = database.create_reading_entry(
+    reading_entry = crud.create_reading_entry(
         db=db,
         user_id=user_id,
         novel_id=bookmark.novel_id,

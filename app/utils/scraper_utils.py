@@ -7,7 +7,7 @@ import logging
 
 from app.enums import ScraperSource, Genre
 
-from app import database
+from app.database import crud
 
 
 logger = logging.getLogger(__name__)
@@ -31,7 +31,7 @@ def make_scraper_function(source: ScraperSource):
             post_get_novel_data(novel_data)
 
         # Create novel entry
-        novel = database.create_novel(
+        novel = crud.create_novel(
             db=db,
             title=novel_data['title'],
             author_name=novel_data['author'],
@@ -56,7 +56,7 @@ def make_scraper_function(source: ScraperSource):
                     f"Error getting chapter content for {chapter_url}: {e}")
                 continue
 
-            database.create_chapter(
+            crud.create_chapter(
                 db=db,
                 novel_id=novel.id,
                 chapter_number=i + 1,

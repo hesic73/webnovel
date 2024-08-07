@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr
 
 
 from app.database.session import DBDependency
-from app import database
+from app.database import crud
 from app.utils.auth_utils import create_access_token, pwd_context
 
 from app import schemas
@@ -35,12 +35,12 @@ def login(form_data: LoginRequest, db: DBDependency):
             401, detail="Username or email must be provided")
 
     if email:
-        user = database.get_user_by_email(db, email)
+        user = crud.get_user_by_email(db, email)
         if not user:
             raise HTTPException(401, detail="Email not found")
         username = user.username
     else:
-        user = database.get_user_by_username(db, username)
+        user = crud.get_user_by_username(db, username)
         if not user:
             raise HTTPException(401, detail="Username not found")
         email = user.email
@@ -70,8 +70,8 @@ async def register_user(form_data: RegisterRequest, db: DBDependency):
         )
     hashed_password = pwd_context.hash(form_data.password)
 
-    user = database.create_user(db=db, username=form_data.username, email=form_data.email,
-                                hashed_password=hashed_password)
+    user = crud.create_user(db=db, username=form_data.username, email=form_data.email,
+                            hashed_password=hashed_password)
 
     if user is None:
         raise HTTPException(

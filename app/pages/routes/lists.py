@@ -10,7 +10,7 @@ from app.consts import DEFAULT_NOVEL_PAGE_SIZE
 
 from app.schemas import AuthorNovelEntry
 from app.database.session import DBDependency
-from app import database
+from app.database import crud
 
 
 router = APIRouter()
@@ -21,10 +21,10 @@ async def novels(request: Request, db: DBDependency, page: int = Query(1, ge=1))
     page_size = DEFAULT_NOVEL_PAGE_SIZE
     skip = (page - 1) * page_size
 
-    novels = database.get_novels(db, skip=skip, limit=page_size)
+    novels = crud.get_novels(db, skip=skip, limit=page_size)
     novels = [convert_db_novel_to_model_novel(db, novel) for novel in novels]
 
-    total_novels = database.get_total_novels_count(
+    total_novels = crud.get_total_novels_count(
         db)
     total_pages = (total_novels + page_size - 1) // page_size
 
@@ -42,7 +42,7 @@ async def novels(request: Request, db: DBDependency, page: int = Query(1, ge=1))
 
 @router.get("/author/{author_id}/")
 async def author(request: Request, author_id: int, db: DBDependency):
-    author = database.get_author_with_novels(db, author_id)
+    author = crud.get_author_with_novels(db, author_id)
     if not author:
         return templates.TemplateResponse(
             "error.html.jinja",
@@ -54,7 +54,7 @@ async def author(request: Request, author_id: int, db: DBDependency):
         )
 
     novels = author.novels
-    latest_chapters = [database.get_last_chapter(
+    latest_chapters = [crud.get_last_chapter(
         db, novel_id=novel.id) for novel in novels]
 
     entries = [AuthorNovelEntry(novel=convert_db_novel_to_model_novel(db, novel), latest_chapter=convert_db_chapter_to_model_chapter(

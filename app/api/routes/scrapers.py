@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Request, APIRouter, Query
+from fastapi import APIRouter
 from concurrent.futures import Future
 import logging
 
@@ -7,9 +7,8 @@ from pydantic import BaseModel
 
 from app.database.session import get_db_sync
 from app.utils.auth_utils import RequireAdminDependency
-from app import database
 
-from app.enums import Genre, ScraperSource, UserType
+from app.enums import Genre, ScraperSource
 
 from app.utils.scraper_utils import make_scraper_function
 from app.utils.process_utils import submit_task
