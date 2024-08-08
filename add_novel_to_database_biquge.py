@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app.enums import Genre, ScraperSource
-from app.database.session import get_db_sync
+from app.database.session import SessionLocal
 import sys
 
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -24,7 +24,7 @@ class Worker(QThread):
         self.add_novel_to_database = make_scraper_function(scraper_source)
 
     def run(self):
-        db = next(get_db_sync())  # Get synchronous DB session
+        db = SessionLocal()
         try:
             self.add_novel_to_database(
                 db=db,

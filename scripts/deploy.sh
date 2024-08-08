@@ -1,0 +1,1 @@
+gunicorn --bind 0000:80 -w 4 -k uvicorn.workers.UvicornWorker app.main:app

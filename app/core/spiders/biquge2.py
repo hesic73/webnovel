@@ -18,7 +18,10 @@ def search_book(book_name: str, biquge_url: str) -> str:
     query_string = urlencode(query_params)
     search_url = f"{search_url_base}?{query_string}"
 
-    results = requests.get(search_url).json()
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    }
+    results = requests.get(search_url, headers=headers, timeout=5.0).json()
 
     for result in results:
         novel_name = result['articlename']
@@ -33,7 +36,10 @@ def search_book(book_name: str, biquge_url: str) -> str:
 
 
 def get_novel_data(url: str):
-    html = requests.get(url).text
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    }
+    html = requests.get(url, headers=headers, timeout=5.0).text
     soup = BeautifulSoup(html, 'html.parser')
 
     # Extract novel info
@@ -62,9 +68,11 @@ def get_novel_data(url: str):
 
 
 def get_chapter_content(url: str):
-    html = requests.get(url).text
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    }
+    html = requests.get(url, headers=headers, timeout=5.0).text
     soup = BeautifulSoup(html, 'html.parser')
-
     content_div = soup.find('div', id='chaptercontent')
 
     # Remove the <p> element at the end
