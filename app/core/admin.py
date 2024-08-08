@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 
 from starlette.requests import Request
-from starlette.responses import RedirectResponse
+
 
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
@@ -11,7 +11,7 @@ from sqladmin.authentication import AuthenticationBackend
 
 from app.database import crud, engine, Author, Novel, Chapter, User, ReadingEntry
 from app.database.session import SessionLocal
-from app.utils.auth_utils import create_access_token, verify_token, pwd_context
+from app.core.auth import create_access_token, verify_token, pwd_context
 from app.enums import UserType
 
 

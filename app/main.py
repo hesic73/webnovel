@@ -8,7 +8,7 @@ from app.pages import pages_router
 from app.utils.process_utils import executor_lifespan
 
 from app.core.admin import initialize_admin
-from app.utils.auth_utils import initialize_auth
+from app.core.auth import initialize_auth
 
 
 from authx.exceptions import MissingTokenError, JWTDecodeError

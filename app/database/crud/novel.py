@@ -39,6 +39,10 @@ def get_novel(db: Session, novel_id: int):
     return db.query(Novel).filter(Novel.id == novel_id).first()
 
 
+def get_novel_with_author(db: Session, novel_id: int) -> Novel:
+    return db.query(Novel).filter(Novel.id == novel_id).options(joinedload(Novel.author)).first()
+
+
 def get_novel_with_chapters(db: Session, novel_id: int):
     return db.query(Novel).filter(Novel.id == novel_id).options(joinedload(Novel.chapters)).first()
 

@@ -6,7 +6,7 @@ import logging
 from pydantic import BaseModel
 
 from app.database.session import get_db_sync
-from app.utils.auth_utils import RequireAdminDependency
+from app.core.auth import RequireAdminDependency
 
 from app.enums import Genre, ScraperSource
 

@@ -7,7 +7,7 @@ from app import schemas
 from app.database.session import DBDependency
 from app.database import crud
 
-from app.utils.auth_utils import RequireUserDependency
+from app.core.auth import RequireUserDependency
 
 from app.enums import UserType
 
@@ -95,30 +95,28 @@ async def add_bookmark(bookmark: BookmarkRequest, db: DBDependency, user: Requir
 
     user_id = user.id
 
-    # Check if the reading entry exists
-    reading_entry = crud.get_reading_entry(
+    # Check if the reading entry already exists
+    existing_entry = crud.get_reading_entry(
         db, user_id=user_id, novel_id=bookmark.novel_id)
-
-    if reading_entry:
-        if bookmark.chapter_id:
+    if existing_entry:
+        if bookmark.chapter_id is not None:
             # Update existing reading entry
-            reading_entry.current_chapter_id = bookmark.chapter_id
+            existing_entry.current_chapter_id = bookmark.chapter_id
             db.commit()
-            db.refresh(reading_entry)
+        return existing_entry
 
-        return reading_entry
-
+    # Check if the user has reached the maximum bookshelf size
     count = crud.count_user_reading_entries(db=db, user_id=user_id)
-
     if count >= BOOKSHELF_SIZE:
         raise HTTPException(
-            status_code=400, detail=f"User has reached the maximum bookshelf size of {BOOKSHELF_SIZE}")
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"User has reached the maximum bookshelf size of {BOOKSHELF_SIZE}")
 
-    reading_entry = crud.create_reading_entry(
+    # Insert the new reading entry
+    new_entry = crud.create_reading_entry(
         db=db,
         user_id=user_id,
         novel_id=bookmark.novel_id,
         current_chapter_id=bookmark.chapter_id
     )
 
-    return reading_entry
+    return new_entry

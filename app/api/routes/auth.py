@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr
 
 from app.database.session import DBDependency
 from app.database import crud
-from app.utils.auth_utils import create_access_token, pwd_context
+from app.core.auth import create_access_token, pwd_context
 
 from app import schemas
 
@@ -32,24 +32,25 @@ def login(form_data: LoginRequest, db: DBDependency):
 
     if not username and not email:
         raise HTTPException(
-            401, detail="Username or email must be provided")
+            status.HTTP_401_UNAUTHORIZED, detail="Username or email must be provided")
 
     if email:
         user = crud.get_user_by_email(db, email)
-        if not user:
-            raise HTTPException(401, detail="Email not found")
-        username = user.username
     else:
         user = crud.get_user_by_username(db, username)
-        if not user:
-            raise HTTPException(401, detail="Username not found")
-        email = user.email
 
-    if pwd_context.verify(password, user.hashed_password):
-        token = create_access_token(uid=username)
-        return {"access_token": token}
+    if not user:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
+                            detail="User not found")
+    username = user.username
+    email = user.email
 
-    raise HTTPException(401, detail="Incorrect password")
+    if not pwd_context.verify(password, user.hashed_password):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
+                            detail="Incorrect password")
+
+    token = create_access_token(uid=username)
+    return {"access_token": token}
 
 
 class RegisterRequest(BaseModel):

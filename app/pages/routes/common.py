@@ -7,7 +7,7 @@ from fastapi import status
 from app.database.session import DBDependency
 from app.database import crud
 
-from app.utils.model_utils import convert_db_novel_to_model_novel, convert_db_chapter_to_model_chapter
+from app.utils.model_utils import map_db_novel_to_schema, map_db_chapter_to_schema
 
 
 from app.consts import LATEST_CHAPTERS_LIMIT
@@ -25,7 +25,7 @@ async def index():
 
 @router.get("/novel/{id}/")
 async def novel(request: Request, id: int, db: DBDependency):
-    novel = crud.get_novel(db, novel_id=id)
+    novel = crud.get_novel_with_author(db, novel_id=id)
 
     if not novel:
         return templates.TemplateResponse(
@@ -37,19 +37,19 @@ async def novel(request: Request, id: int, db: DBDependency):
             status_code=status.HTTP_404_NOT_FOUND,
         )
 
-    novel = convert_db_novel_to_model_novel(db, novel)
+    novel = map_db_novel_to_schema(novel)
 
     first_chapter = crud.get_first_chapter(db, novel_id=id)
-    first_chapter = convert_db_chapter_to_model_chapter(
+    first_chapter = map_db_chapter_to_schema(
         first_chapter) if first_chapter else None
 
     last_chapter = crud.get_last_chapter(db, novel_id=id)
-    last_chapter = convert_db_chapter_to_model_chapter(
+    last_chapter = map_db_chapter_to_schema(
         last_chapter) if last_chapter else None
 
     latest_chapters = crud.get_chapters_reversed(
         db, novel_id=id, limit=LATEST_CHAPTERS_LIMIT)
-    latest_chapters = [convert_db_chapter_to_model_chapter(chapter) if chapter else None
+    latest_chapters = [map_db_chapter_to_schema(chapter) if chapter else None
                        for chapter in latest_chapters]
 
     return templates.TemplateResponse(request=request, name="novel.html.jinja", context={
@@ -65,13 +65,13 @@ async def novel(request: Request, id: int, db: DBDependency):
 async def chapters(request: Request, id: int, db: DBDependency):
     chapters = crud.get_all_chapters(
         db, novel_id=id)
-    chapters = [convert_db_chapter_to_model_chapter(
+    chapters = [map_db_chapter_to_schema(
         chapter) for chapter in chapters]
     # Add a function to get the total count of chapters for a novel
     # total_chapters = crud.get_total_chapters_count(db, novel_id=id)
 
-    novel = crud.get_novel(db, novel_id=id)
-    novel = convert_db_novel_to_model_novel(db, novel)
+    novel = crud.get_novel_with_author(db, novel_id=id)
+    novel = map_db_novel_to_schema(novel)
 
     return templates.TemplateResponse(
         request=request,
@@ -108,16 +108,16 @@ async def chapter(request: Request, novel_id: int, chapter_id: int, db: DBDepend
             status_code=status.HTTP_404_NOT_FOUND,
         )
 
-    chapter_model = convert_db_chapter_to_model_chapter(chapter)
-    novel_model = convert_db_novel_to_model_novel(db, novel)
+    chapter_model = map_db_chapter_to_schema(chapter)
+    novel_model = map_db_novel_to_schema(novel)
 
     previous_chapter = crud.get_previous_chapter(
         db, novel_id, chapter.chapter_number)
-    previous_chapter_model = convert_db_chapter_to_model_chapter(
+    previous_chapter_model = map_db_chapter_to_schema(
         previous_chapter) if previous_chapter else None
     next_chapter = crud.get_next_chapter(
         db, novel_id, chapter.chapter_number)
-    next_chapter_model = convert_db_chapter_to_model_chapter(
+    next_chapter_model = map_db_chapter_to_schema(
         next_chapter) if next_chapter else None
 
     return templates.TemplateResponse(

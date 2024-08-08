@@ -1,26 +1,16 @@
-from sqlalchemy.orm import Session
-
-
-from app.database import Author, Novel, Chapter
+from app.database import Novel, Chapter
 from app import schemas
 
 
-def convert_db_novel_to_model_novel(db: Session, db_novel: Novel) -> schemas.Novel:
-    # Fetch the author's name using the author_id
-    db_author: Author = db.query(Author).filter(
-        Author.id == db_novel.author_id).first()
+def map_db_novel_to_schema(db_novel: Novel) -> schemas.Novel:
 
-    if not db_author:
-        raise ValueError("Author not found")
-
-    # Create the ModelNovel instance
     model_novel = schemas.Novel(
         title=db_novel.title,
         id=db_novel.id,
-        author_name=db_author.name,
+        author_name=db_novel.author.name,
         author=schemas.Author(
-            id=db_author.id,
-            name=db_author.name
+            id=db_novel.author.id,
+            name=db_novel.author.name
         ),
         genre=db_novel.genre,
         description=db_novel.description
@@ -29,7 +19,7 @@ def convert_db_novel_to_model_novel(db: Session, db_novel: Novel) -> schemas.Nov
     return model_novel
 
 
-def convert_db_chapter_to_model_chapter(db_chapter: Chapter) -> schemas.Chapter:
+def map_db_chapter_to_schema(db_chapter: Chapter) -> schemas.Chapter:
     return schemas.Chapter(
         id=db_chapter.id,
         novel_id=db_chapter.novel_id,
